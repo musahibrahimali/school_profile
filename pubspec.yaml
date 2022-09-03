@@ -1,0 +1,112 @@
+name: school_profile
+description: The mobile standalone app for profilling schools in ghana. Final Year Electrical/Electronics Engineering project
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.6 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.5
+  # others
+  shimmer: ^2.0.0
+  faker: ^2.0.0
+  humanizer: ^2.0.0
+  humanize: ^0.3.0
+  camera: ^0.10.0+1
+  animated_theme_switcher: ^2.0.6
+  responsive_sizer: ^3.1.0
+  equatable: ^2.0.5
+  flutter_local_notifications: ^9.9.1
+  dio: ^4.0.6
+  slide_countdown: ^0.3.2
+  line_awesome_icons: ^1.0.4+2
+  another_flushbar: ^1.10.29
+  flutter_screenutil: ^5.5.4
+  shared_preferences: ^2.0.15
+  freezed_annotation: ^2.1.0
+  json_annotation: ^4.6.0
+  flutter_svg: ^1.1.4
+  image_picker: ^0.8.5+3
+  lottie: ^1.4.2
+  google_fonts: ^3.0.1
+  get: ^4.6.5
+  flutter_fadein: ^2.0.0
+  connectivity_plus: ^2.3.6+1
+  internet_connection_checker: ^0.0.1+4
+  url_launcher: ^6.1.5
+  path_provider: ^2.0.11
+  line_awesome_flutter: ^2.0.0
+  dartz: ^0.10.1
+  supercharged: ^2.1.1
+  auto_size_text: ^3.0.0
+  onboarding: ^3.1.0
+  dropdown_textfield: ^1.0.3
+  date_time_picker: ^2.1.0
+#  animated_native_splash: ^1.3.0
+
+  # firebase
+  firebase_core: ^1.21.1
+  firebase_auth: ^3.7.0
+  firebase_storage: ^10.3.7
+  cloud_firestore: ^3.4.6
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.1
+  build_runner: ^2.2.0
+  freezed: ^2.1.0+1
+  json_serializable: ^6.3.1
+
+animated_native_splash:
+  jsonFile: assets/splash/loading.json
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/core/
+    - assets/core/images/
+    - assets/core/students/
+    - assets/images/
+    - assets/carousel/
+    - assets/icons/
+    - assets/splash/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
