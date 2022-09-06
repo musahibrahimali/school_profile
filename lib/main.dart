@@ -49,6 +49,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     userController.initUser();
+    // post frame callback
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (userController.isUserLoggedIn == true) {
+        // get user data
+        HelperMethods.getUserInfo();
+      }
+      HelperMethods.getAllSchools();
+    });
     super.initState();
   }
 
@@ -76,6 +84,7 @@ class _MyAppState extends State<MyApp> {
                     /// [admin]
                     AdminAuthScreen.id: (context) => const AdminAuthScreen(),
                     RegisterSchoolScreen.id: (context) => const RegisterSchoolScreen(),
+                    AdminSchoolsScreen.id: (context) => const AdminSchoolsScreen(),
 
                     /// [pages]
                     HomePage.id: (context) => const HomePage(),
@@ -95,38 +104,4 @@ class _MyAppState extends State<MyApp> {
       },
     );
   }
-}
-
-func() {
-  return sizer.ResponsiveSizer(
-    builder: (BuildContext context, Orientation orientation, sizer.ScreenType screenType) {
-      return ThemeProvider(
-        initTheme: themeController.isLightTheme ? BrandThemes.lightTheme(context) : BrandThemes.darkTheme(context),
-        builder: (BuildContext context, ThemeData theme) {
-          return GetMaterialApp(
-            title: 'School Profiler',
-            debugShowCheckedModeBanner: false,
-            color: BrandColors.colorBackground,
-            theme: BrandThemes.lightTheme(context),
-            darkTheme: BrandThemes.darkTheme(context),
-            themeMode: themeController.isLightTheme ? ThemeMode.light : ThemeMode.dark,
-            home: const HomeScreen(),
-            routes: {
-              /// [screens]
-              HomeScreen.id: (context) => const HomeScreen(),
-
-              /// [pages]
-              HomePage.id: (context) => const HomePage(),
-              AboutPage.id: (context) => const AboutPage(),
-              SchoolsPage.id: (context) => const SchoolsPage(),
-              ReviewsPage.id: (context) => const ReviewsPage(),
-              UserProfilePage.id: (context) => const UserProfilePage(),
-              BlogsPage.id: (context) => const BlogsPage(),
-              AuthPage.id: (context) => const AuthPage(),
-            },
-          );
-        },
-      );
-    },
-  );
 }

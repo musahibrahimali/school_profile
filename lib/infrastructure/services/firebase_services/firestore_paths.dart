@@ -3,7 +3,8 @@ class FirestorePaths {
   static String get userCollection => 'users';
 
   // reviews path
-  static String get rideRequestCollections => 'reviews';
+  static String get reviewsCollections => 'reviews';
+  static String reviewsDocument({required String id}) => 'reviews/$id';
 
   // user document
   static String userDocument(String docId) => 'users/$docId';
@@ -16,7 +17,9 @@ class FirestorePaths {
 
   // admins
   static String get adminsCollection => 'admins';
+  static String adminsDocument({required String id}) => 'admins/$id';
 
   // schools
   static String get schoolsCollection => 'schools';
+  static String schoolsDocument({required String id}) => 'schools/$id';
 }

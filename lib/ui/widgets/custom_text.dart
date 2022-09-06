@@ -13,6 +13,7 @@ class CustomText extends StatelessWidget {
   final double? letterSpacing;
   final double? horizontalMargin;
   final double? verticalMargin;
+  final double? height;
 
   const CustomText({
     Key? key,
@@ -26,6 +27,7 @@ class CustomText extends StatelessWidget {
     this.letterSpacing,
     this.horizontalMargin,
     this.verticalMargin,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -41,6 +43,7 @@ class CustomText extends StatelessWidget {
         overflow: overflow ?? TextOverflow.ellipsis,
         maxLines: maxLines ?? 1,
         style: GoogleFonts.montserrat(
+          height: height,
           color: color ?? BrandColors.colorText,
           fontWeight: fontWeight ?? FontWeight.normal,
           fontSize: fontSize ?? 22.0,

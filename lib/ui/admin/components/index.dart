@@ -1,3 +1,12 @@
-export 'school_details_first.dart';
-export 'school_details_second.dart';
-export 'school_details_third.dart';
+export 'address_and_map_address.dart';
+export 'category_and_year.dart';
+export 'email_and_phone.dart';
+export 'extra_curricular_activities_and_avatar.dart';
+export 'head_and_student_pop.dart';
+export 'history_and_about.dart';
+export 'images_and_videos.dart';
+export 'name_and_slogan.dart';
+export 'performance_and_fee_range.dart';
+export 'region_and_district.dart';
+export 'school_map_location_view.dart';
+export 'teachers_and_non_teachers_pop.dart';

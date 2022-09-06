@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:school_profile/index.dart';
+import 'package:school_profile/ui/admin/components/awards_and_achievement.dart';
 
-class InitialSchoolDetails extends StatefulWidget {
-  const InitialSchoolDetails({Key? key}) : super(key: key);
+class HistoryAndAbout extends StatefulWidget {
+  const HistoryAndAbout({Key? key}) : super(key: key);
 
   @override
-  State<InitialSchoolDetails> createState() => _InitialSchoolDetailsState();
+  State<HistoryAndAbout> createState() => _HistoryAndAboutState();
 }
 
-class _InitialSchoolDetailsState extends State<InitialSchoolDetails> {
+class _HistoryAndAboutState extends State<HistoryAndAbout> {
   // create a scaffold key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -41,7 +42,6 @@ class _InitialSchoolDetailsState extends State<InitialSchoolDetails> {
       key: _scaffoldKey,
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: true,
-      drawer: const CustomDrawer(),
       appBar: AppBar(
         backgroundColor: const Color(0xffF06A66),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -75,7 +75,7 @@ class _InitialSchoolDetailsState extends State<InitialSchoolDetails> {
                   children: [
                     SizedBox(height: height * 0.06),
                     Text(
-                      "School Name & Moto",
+                      "History of the School",
                       style: TextStyle(
                         fontSize: height * 0.03,
                         color: Colors.white,
@@ -87,7 +87,7 @@ class _InitialSchoolDetailsState extends State<InitialSchoolDetails> {
                       const TextSpan(
                         children: [
                           TextSpan(
-                            text: "Please provide your school name and motto",
+                            text: "Please provide a description or history of the school",
                             style: TextStyle(
                               fontSize: 18.0,
                               color: Colors.white,
@@ -108,28 +108,15 @@ class _InitialSchoolDetailsState extends State<InitialSchoolDetails> {
                         onChanged: (val) {
                           setState(() {});
                         },
-                        label: "School Name",
-                        controller: schoolController.nameController,
-                        keyboardType: TextInputType.text,
+                        maxLines: 12,
+                        label: "History/about",
+                        controller: schoolController.historyController,
+                        keyboardType: TextInputType.multiline,
                         error: false,
                         errorMessage: "Invalid input",
                       ),
                     ),
                     const SizedBox(height: 30.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: BrandTextBox(
-                        onChanged: (val) {
-                          setState(() {});
-                        },
-                        label: "Motto",
-                        controller: schoolController.sloganController,
-                        keyboardType: TextInputType.text,
-                        error: false,
-                        errorMessage: "Invalid input",
-                      ),
-                    ),
-                    SizedBox(height: 4.h),
                   ],
                 ),
               ),
@@ -137,44 +124,10 @@ class _InitialSchoolDetailsState extends State<InitialSchoolDetails> {
           ),
 
           BrandBottomNav(
-            index: 0,
-            isButtonDisabled: (schoolController.nameController.text.length <= 5 || schoolController.sloganController.text.length <= 5) ? true : false,
+            index: 7,
+            isButtonDisabled: (schoolController.historyController.text.length <= 150) ? true : false,
             function: () async {
-              if (userController.isUserLoggedIn && userController.currentUserInfo.isAdmin == false) {
-                // show dialog
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CustomDialog(
-                      title: "Info",
-                      description: "You are not an admin",
-                      buttonText: "Login",
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, AdminAuthScreen.id);
-                      },
-                    );
-                  },
-                );
-              }
-              if (userController.isUserLoggedIn == false) {
-                // show dialog
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CustomDialog(
-                      title: "Error",
-                      description: "You are not an admin",
-                      buttonText: "Login",
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, AdminAuthScreen.id);
-                      },
-                    );
-                  },
-                );
-              }
-              if (schoolController.nameController.text.length <= 5 || schoolController.sloganController.text.length <= 5) {
+              if (schoolController.historyController.text.length <= 150) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',
@@ -187,7 +140,7 @@ class _InitialSchoolDetailsState extends State<InitialSchoolDetails> {
                     vertical: 4.0.h,
                   ),
                   titleColor: themeController.isLightTheme ? BrandColors.colorPink : BrandColors.colorWhiteAccent,
-                  message: 'Please fill out all the fields',
+                  message: 'History must be at least 150 characters',
                   messageColor: themeController.isLightTheme ? BrandColors.colorPink : BrandColors.colorWhiteAccent,
                   icon: LineAwesomeIcons.exclamation_circle,
                   iconColor: themeController.isLightTheme ? BrandColors.kErrorColor : BrandColors.colorWhiteAccent,
@@ -195,7 +148,7 @@ class _InitialSchoolDetailsState extends State<InitialSchoolDetails> {
                 );
                 return;
               }
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const SchoolSecondDetails()));
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const AwardsAndAchievements()));
             },
           ),
         ],

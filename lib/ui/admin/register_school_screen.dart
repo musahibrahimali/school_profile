@@ -13,6 +13,8 @@ class RegisterSchoolScreen extends StatefulWidget {
 class _RegisterSchoolScreenState extends State<RegisterSchoolScreen> {
   @override
   void initState() {
+    userController.initUser();
+    debugPrint("user logged in: ${userController.isUserLoggedIn}");
     super.initState();
   }
 
@@ -23,8 +25,14 @@ class _RegisterSchoolScreenState extends State<RegisterSchoolScreen> {
         resizeToAvoidBottomInset: true,
         extendBodyBehindAppBar: true,
         backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
+        drawer: const CustomDrawer(),
+        appBar: AppBar(
+          backgroundColor: const Color(0xffF06A66),
+          iconTheme: const IconThemeData(color: Colors.white),
+          elevation: 0,
+        ),
         body: const SafeArea(
-          child: InitialSchoolDetails(),
+          child: NameAndSlogan(),
         ),
       ),
     );

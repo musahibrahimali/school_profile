@@ -1,10 +1,13 @@
 export 'address.dart';
+export 'address_point.dart';
 export 'all_blog.dart';
 export 'all_institutions.dart';
 export 'bottom_bar_item.dart';
 export 'default_string.dart';
 export 'popular_courses.dart';
+export 'prediction.dart';
 export 'review_model.dart';
+export 'school_likes.dart';
 export 'school_model.dart';
 export 'user_feedback.dart';
 export 'user_model.dart';

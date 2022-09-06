@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_profile/index.dart';
 
 class Feedback {
   final String name, review, userPic;
@@ -20,21 +21,21 @@ List<Feedback> feedbacks = [
     id: 1,
     name: "Toobu Nabie D.",
     review: review,
-    userPic: "Assets.imagesPeople",
+    userPic: Assets.imagesPeople,
     color: const Color(0xFFFFF3DD),
   ),
   Feedback(
     id: 2,
     name: "Sylvester Owusu",
     review: review,
-    userPic: "Assets.imagesPeople",
+    userPic: Assets.imagesPeople,
     color: const Color(0xFFD9FFFC),
   ),
   Feedback(
     id: 3,
     name: "Musah Ibrahim Ali",
     review: review,
-    userPic: "Assets.imagesPeople",
+    userPic: Assets.imagesPeople,
     color: const Color(0xFFFFE0E0),
   ),
 ];

@@ -60,7 +60,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     Navigator.pop(context);
                     pageController.animateToPage(
                       1,
-                      duration: const Duration(seconds: 3),
+                      duration: const Duration(seconds: 1),
                       curve: Curves.easeInOutCubic,
                     );
                   },
@@ -74,7 +74,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     Navigator.pop(context);
                     pageController.animateToPage(
                       2,
-                      duration: const Duration(seconds: 3),
+                      duration: const Duration(seconds: 1),
                       curve: Curves.easeInOutCubic,
                     );
                   },
@@ -84,7 +84,34 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   infoCount: 0,
                 ),
                 CustomListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, BlogsPage.id);
+                  },
+                  isCollapsed: _isCollapsed,
+                  icon: LineAwesomeIcons.blog,
+                  title: 'Blog',
+                  infoCount: 0,
+                ),
+                CustomListTile(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, AboutPage.id);
+                  },
+                  isCollapsed: _isCollapsed,
+                  icon: LineAwesomeIcons.info,
+                  title: 'About',
+                  infoCount: 0,
+                ),
+                CustomListTile(
+                  onTap: () {
+                    Navigator.pop(context);
+                    pageController.animateToPage(
+                      3,
+                      duration: const Duration(seconds: 1),
+                      curve: Curves.easeInOutCubic,
+                    );
+                  },
                   isCollapsed: _isCollapsed,
                   icon: LineAwesomeIcons.user_shield,
                   title: 'Profile',
@@ -107,6 +134,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           Navigator.pushNamed(context, RegisterSchoolScreen.id);
                         },
                       ),
+                    ],
+                  ),
+                if (userController.isUserLoggedIn || userController.currentUserInfo.isAdmin == true)
+                  Column(
+                    children: <Widget>[
+                      CustomListTile(
+                        isCollapsed: _isCollapsed,
+                        icon: LineAwesomeIcons.bar_chart,
+                        title: 'Admin Schools',
+                        infoCount: 0,
+                        onTap: () {
+                          Navigator.pushNamed(context, AdminSchoolsScreen.id);
+                        },
+                      ),
                       BrandDivider(color: BrandColors.kLightGray),
                     ],
                   ),
@@ -119,7 +160,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     Navigator.pushNamed(context, SettingsPage.id);
                   },
                 ),
-                BrandDivider(color: BrandColors.kLightGray),
                 const SizedBox(height: 10),
                 if (userController.isUserLoggedIn)
                   Column(

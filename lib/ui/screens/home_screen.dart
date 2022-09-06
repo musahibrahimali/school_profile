@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -19,9 +20,22 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<Widget> pages;
   late List<BarItem> barItems;
   late Future<bool> future;
+  late Position currentPosition;
 
   Future<bool> loadPreferences() async {
     return true;
+  }
+
+  /// set up position locator
+  _setupPositionLocator() async {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.bestForNavigation,
+    );
+    currentPosition = position;
+
+    /// confirm location
+    await HelperFunctions.findCoordinateAddress(position, context);
+    debugPrint("current location place name ${schoolController.searchSchoolController.text}");
   }
 
   @override
@@ -33,11 +47,20 @@ class _HomeScreenState extends State<HomeScreen> {
       HelperMethods.getUserInfo();
     }
 
+    // add post frame callback
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _setupPositionLocator();
+      if (schoolController.schools.isEmpty) {
+        // get all schools
+        HelperMethods.getAllSchools();
+      }
+    });
+
     pageController = PageController(initialPage: selectedBottomBarIndex);
     pages = [
       const HomePage(),
       const SchoolsPage(),
-      const ReviewsPage(),
+      const BlogsPage(),
       const AuthPage(),
     ];
     barItems = [
@@ -56,9 +79,9 @@ class _HomeScreenState extends State<HomeScreen> {
         color: const Color(0xff6078ff),
       ),
       BarItem(
-        icon: LineAwesomeIcons.bell,
+        icon: LineAwesomeIcons.blog,
         iconSize: 24,
-        text: "Reviews",
+        text: "Blogs",
         textSize: 18,
         color: Colors.red,
       ),
@@ -74,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Color getAppBarColor() {
     if (selectedBottomBarIndex == 0) {
-      return themeController.isLightTheme ? Colors.purpleAccent[700]! : BrandColors.colorDarkTheme;
+      return themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme;
     } else if (selectedBottomBarIndex == 1) {
       return themeController.isLightTheme ? const Color(0xff6078ff) : BrandColors.colorDarkTheme;
     } else if (selectedBottomBarIndex == 2) {
@@ -122,9 +145,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: TextFormField(
-                        // controller: _pickupController,
+                        controller: schoolController.searchSchoolController,
                         keyboardType: TextInputType.text,
                         textAlign: TextAlign.start,
+                        autofocus: false,
                         onChanged: (value) async {
                           // setState(() {
                           //   _destinationPredictionList = [];
@@ -205,7 +229,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   icon: Icon(
                     LineAwesomeIcons.bars,
-                    color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorBackground,
+                    color: index == 0
+                        ? themeController.isLightTheme
+                            ? BrandColors.colorDarkTheme
+                            : BrandColors.colorWhiteAccent
+                        : themeController.isLightTheme
+                            ? BrandColors.colorWhiteAccent
+                            : BrandColors.colorBackground,
                     size: 28.0,
                   ),
                 ),

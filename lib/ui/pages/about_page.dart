@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_profile/index.dart';
 
 class AboutPage extends StatefulWidget {
   static const String id = "about_page";
@@ -9,14 +10,23 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
-      ),
-      body: const Center(
-        child: Text('Home Page'),
+      key: _scaffoldKey,
+      backgroundColor: BrandColors.colorBackground,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: const <Widget>[
+              // MobileHeader(),
+              MobileAboutSection(),
+              MobileFeedBackSection(),
+              MobileContactSection(),
+            ],
+          ),
+        ),
       ),
     );
   }

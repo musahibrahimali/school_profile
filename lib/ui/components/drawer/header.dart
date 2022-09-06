@@ -54,7 +54,14 @@ class CustomDrawerHeader extends StatelessWidget {
             Expanded(
               flex: 1,
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                  pageController.animateToPage(
+                    1,
+                    duration: const Duration(seconds: 1),
+                    curve: Curves.linear,
+                  );
+                },
                 icon: Icon(
                   LineAwesomeIcons.search,
                   color: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,

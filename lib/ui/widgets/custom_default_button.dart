@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:school_profile/index.dart';
 
 class DefaultButton extends StatelessWidget {
@@ -14,23 +15,30 @@ class DefaultButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(
-          vertical: kDefaultPadding,
-          horizontal: kDefaultPadding * 2.5,
+    return Obx(
+      () => TextButton(
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(
+            vertical: kDefaultPadding,
+            horizontal: kDefaultPadding * 2.5,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+            side: BorderSide(
+              color: themeController.isLightTheme ? Colors.transparent : BrandColors.colorPrimaryDark,
+            ),
+          ),
+          backgroundColor: themeController.isLightTheme ? const Color(0xFFE8F0F9) : BrandColors.colorDarkTheme,
+          // color: Color(0xFFE8F0F9),
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-        backgroundColor: const Color(0xFFE8F0F9),
-        // color: Color(0xFFE8F0F9),
-      ),
-      onPressed: press,
-      child: Row(
-        children: [
-          Image.asset(imageSrc, height: 40),
-          const SizedBox(width: kDefaultPadding),
-          Text(text),
-        ],
+        onPressed: press,
+        child: Row(
+          children: [
+            Image.asset(imageSrc, height: 40),
+            const SizedBox(width: kDefaultPadding),
+            Text(text),
+          ],
+        ),
       ),
     );
   }

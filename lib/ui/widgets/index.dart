@@ -1,4 +1,5 @@
 export 'animated_bottom_bar.dart';
+export 'blog_post.dart';
 export 'brand_divider.dart';
 export 'custom_button.dart';
 export 'custom_default_button.dart';

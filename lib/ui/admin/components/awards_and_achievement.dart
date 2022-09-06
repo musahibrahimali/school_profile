@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:school_profile/index.dart';
+import 'package:school_profile/ui/admin/components/rating_and_facilities.dart';
 
-class SchoolDetailsThird extends StatefulWidget {
-  const SchoolDetailsThird({Key? key}) : super(key: key);
+class AwardsAndAchievements extends StatefulWidget {
+  const AwardsAndAchievements({Key? key}) : super(key: key);
 
   @override
-  State<SchoolDetailsThird> createState() => _SchoolDetailsThirdState();
+  State<AwardsAndAchievements> createState() => _AwardsAndAchievementsState();
 }
 
-class _SchoolDetailsThirdState extends State<SchoolDetailsThird> {
+class _AwardsAndAchievementsState extends State<AwardsAndAchievements> {
   // create a scaffold key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -40,7 +41,6 @@ class _SchoolDetailsThirdState extends State<SchoolDetailsThird> {
       key: _scaffoldKey,
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: true,
-      drawer: const CustomDrawer(),
       appBar: AppBar(
         backgroundColor: const Color(0xffF06A66),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -74,7 +74,7 @@ class _SchoolDetailsThirdState extends State<SchoolDetailsThird> {
                   children: [
                     SizedBox(height: height * 0.06),
                     Text(
-                      "School Name & Moto",
+                      "History and Awards of the School",
                       style: TextStyle(
                         fontSize: height * 0.03,
                         color: Colors.white,
@@ -86,7 +86,7 @@ class _SchoolDetailsThirdState extends State<SchoolDetailsThird> {
                       const TextSpan(
                         children: [
                           TextSpan(
-                            text: "Please provide your school name and motto",
+                            text: "Please provide a description of awards won by the school if any",
                             style: TextStyle(
                               fontSize: 18.0,
                               color: Colors.white,
@@ -107,23 +107,10 @@ class _SchoolDetailsThirdState extends State<SchoolDetailsThird> {
                         onChanged: (val) {
                           setState(() {});
                         },
-                        label: "School Name",
-                        controller: schoolController.nameController,
-                        keyboardType: TextInputType.text,
-                        error: false,
-                        errorMessage: "Invalid input",
-                      ),
-                    ),
-                    const SizedBox(height: 30.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: BrandTextBox(
-                        onChanged: (val) {
-                          setState(() {});
-                        },
-                        label: "Motto",
-                        controller: schoolController.sloganController,
-                        keyboardType: TextInputType.text,
+                        maxLines: 5,
+                        label: "Awards and Achievements (optional)",
+                        controller: schoolController.awardsController,
+                        keyboardType: TextInputType.multiline,
                         error: false,
                         errorMessage: "Invalid input",
                       ),
@@ -136,47 +123,10 @@ class _SchoolDetailsThirdState extends State<SchoolDetailsThird> {
           ),
 
           BrandBottomNav(
-            index: 2,
-            isButtonDisabled: (schoolController.nameController.text.length <= 5 || schoolController.sloganController.text.length <= 5) ? true : false,
+            index: 8,
+            isButtonDisabled: false,
             function: () async {
-              if (userController.isUserLoggedIn && userController.currentUserInfo.isAdmin == false) {
-                // show dialog
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CustomDialog(
-                      title: "Info",
-                      description: "You are not an admin",
-                      buttonText: "Login",
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, AdminAuthScreen.id);
-                      },
-                    );
-                  },
-                );
-              }
-              if (userController.isUserLoggedIn == false) {
-                // show dialog
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CustomDialog(
-                      title: "Error",
-                      description: "You are not an admin",
-                      buttonText: "Login",
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, AdminAuthScreen.id);
-                      },
-                    );
-                  },
-                );
-              }
-              if (schoolController.nameController.text.length >= 5 || schoolController.sloganController.text.length >= 5) {
-                return;
-              }
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const SchoolSecondDetails()));
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const RatingsAndFacilities()));
             },
           ),
         ],

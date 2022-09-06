@@ -11,3 +11,9 @@ Future<SharedPreferences> sharedPreferences = SharedPreferences.getInstance();
 
 ServiceInitializer get serviceInitializer => ServiceInitializer.instance;
 HelperMethods get helperMethods => HelperMethods.instance;
+
+UserRepo userRepo = UserRepo();
+AuthRepo authRepo = AuthRepo();
+SchoolRepo schoolRepo = SchoolRepo();
+ReviewRepo reviewRepo = ReviewRepo();
+FirebaseStorageRepo firebaseStorageRepo = FirebaseStorageRepo();

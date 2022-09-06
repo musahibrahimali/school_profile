@@ -1,4 +1,3 @@
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,26 +5,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:school_profile/index.dart';
 
-class SchoolSecondDetails extends StatefulWidget {
-  const SchoolSecondDetails({Key? key}) : super(key: key);
+class NameAndSlogan extends StatefulWidget {
+  const NameAndSlogan({Key? key}) : super(key: key);
 
   @override
-  State<SchoolSecondDetails> createState() => _SchoolSecondDetailsState();
+  State<NameAndSlogan> createState() => _NameAndSloganState();
 }
 
-class _SchoolSecondDetailsState extends State<SchoolSecondDetails> {
+class _NameAndSloganState extends State<NameAndSlogan> {
   // create a scaffold key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  // late SingleValueDropDownController _cnt;
 
   // is keyboard open
   bool _isKeyboardOpen = false;
-
-  @override
-  void initState() {
-    // _cnt = SingleValueDropDownController();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +43,6 @@ class _SchoolSecondDetailsState extends State<SchoolSecondDetails> {
       key: _scaffoldKey,
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: true,
-      drawer: const CustomDrawer(),
       appBar: AppBar(
         backgroundColor: const Color(0xffF06A66),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -83,9 +74,9 @@ class _SchoolSecondDetailsState extends State<SchoolSecondDetails> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: height * 0.06),
+                    SizedBox(height: height * 0.02),
                     Text(
-                      "School Category and Year of Establishment",
+                      "School Name & Moto",
                       style: TextStyle(
                         fontSize: height * 0.03,
                         color: Colors.white,
@@ -97,7 +88,7 @@ class _SchoolSecondDetailsState extends State<SchoolSecondDetails> {
                       const TextSpan(
                         children: [
                           TextSpan(
-                            text: "Please provide your school category and year of establishment",
+                            text: "Please provide your school name and motto",
                             style: TextStyle(
                               fontSize: 18.0,
                               color: Colors.white,
@@ -112,20 +103,48 @@ class _SchoolSecondDetailsState extends State<SchoolSecondDetails> {
                       ),
                     ),
                     SizedBox(height: _isKeyboardOpen ? 8.0.h : 18.h),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: BrandTextBox(
+                        onChanged: (val) {
+                          setState(() {});
+                        },
+                        label: "School Name",
+                        controller: schoolController.nameController,
+                        keyboardType: TextInputType.text,
+                        error: false,
+                        errorMessage: "Invalid input",
+                      ),
+                    ),
                     const SizedBox(height: 30.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: BrandTextBox(
+                        onChanged: (val) {
+                          setState(() {});
+                        },
+                        label: "Motto",
+                        controller: schoolController.sloganController,
+                        keyboardType: TextInputType.text,
+                        error: false,
+                        errorMessage: "Invalid input",
+                      ),
+                    ),
+                    const SizedBox(height: 30.0),
+                    // select category
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),
                       child: DropDownTextField(
                         // singleController: _cnt,
                         clearOption: false,
-                        enableSearch: true,
-                        initialValue: "Select School Category",
+                        enableSearch: false,
+                        initialValue: "Select School Level",
                         textStyle: GoogleFonts.montserrat(
                           fontSize: 18.0,
                           color: BrandColors.white,
                         ),
                         textFieldDecoration: const InputDecoration(
-                          hintText: "Select School Category",
+                          hintText: "Select School Level",
                           hintStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 18.0,
@@ -155,92 +174,20 @@ class _SchoolSecondDetailsState extends State<SchoolSecondDetails> {
                         },
                         dropDownItemCount: 4,
                         dropDownList: const [
-                          DropDownValueModel(name: 'Private', value: "Private"),
-                          DropDownValueModel(name: 'Internation', value: "International"),
-                          DropDownValueModel(name: 'Public', value: "Public"),
-                          DropDownValueModel(name: 'Hybrid', value: "Hybrid"),
+                          DropDownValueModel(name: 'Day Care', value: "Day Care"),
+                          DropDownValueModel(name: 'Pre School', value: "Pre School"),
+                          DropDownValueModel(name: 'Creche/Kindergarten', value: "Creche/Kindergarten"),
+                          DropDownValueModel(name: 'Primary', value: "Primary"),
+                          DropDownValueModel(name: 'Junior High School', value: "Junior High School"),
                         ],
                         onChanged: (val) {
-                          // debugPrint(val.toString());
-                          // get the value
-                          // debugPrint(val.value.toString());
-                          schoolController.categoryController.text = val.value.toString();
-                          // hide the dropdown
+                          schoolController.levelController.text = val.value.toString();
+                          debugPrint("Selected value: ${schoolController.levelController.text}");
                           FocusScope.of(context).unfocus();
                         },
                       ),
                     ),
-                    const SizedBox(height: 30.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: BrandTextBox(
-                        onChanged: (val) {
-                          setState(() {});
-                        },
-                        label: "Year Established",
-                        controller: schoolController.yearOfEstablishmentController,
-                        keyboardType: TextInputType.text,
-                        error: false,
-                        errorMessage: "Invalid input",
-                      ),
-                    ),
                     SizedBox(height: 4.h),
-                    DateTimePicker(
-                      type: DateTimePickerType.date,
-                      dateMask: 'd MMM, yyyy',
-                      initialValue: DateTime.now().toString(),
-                      firstDate: DateTime(1800),
-                      lastDate: DateTime(2100),
-                      // change the border color
-                      decoration: InputDecoration(
-                        border: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xffEEEEEE),
-                          ),
-                        ),
-                        focusedBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xffEEEEEE),
-                          ),
-                        ),
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xffEEEEEE),
-                          ),
-                        ),
-                        labelText: "Date of Establishment",
-                        labelStyle: GoogleFonts.montserrat(
-                          fontSize: 18.0,
-                          color: BrandColors.white,
-                        ),
-                      ),
-                      style: GoogleFonts.montserrat(
-                        fontSize: 18.0,
-                        color: BrandColors.white,
-                      ),
-                      icon: const Icon(
-                        LineAwesomeIcons.calendar_1,
-                        color: Colors.white,
-                        size: 32.0,
-                      ),
-                      dateLabelText: 'Established Date',
-                      selectableDayPredicate: (date) {
-                        if (date.weekday == 6 || date.weekday == 7) {
-                          return false;
-                        }
-                        return true;
-                      },
-                      onChanged: (val) {
-                        debugPrint("Date: $val");
-                        schoolController.yearOfEstablishmentController.text = val;
-                      },
-                      validator: (val) {
-                        return null;
-                      },
-                      onSaved: (val) {
-                        debugPrint("Date: $val");
-                      },
-                    ),
                   ],
                 ),
               ),
@@ -248,44 +195,11 @@ class _SchoolSecondDetailsState extends State<SchoolSecondDetails> {
           ),
 
           BrandBottomNav(
-            index: 1,
-            isButtonDisabled: (schoolController.categoryController.text.length <= 5 || schoolController.yearOfEstablishmentController.text.length <= 5) ? true : false,
+            index: 0,
+            isButtonDisabled:
+                (schoolController.nameController.text.length <= 5 || schoolController.sloganController.text.length <= 5 || schoolController.levelController.text.length <= 3) ? true : false,
             function: () async {
-              if (userController.isUserLoggedIn && userController.currentUserInfo.isAdmin == false) {
-                // show dialog
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CustomDialog(
-                      title: "Info",
-                      description: "You are not an admin",
-                      buttonText: "Login",
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, AdminAuthScreen.id);
-                      },
-                    );
-                  },
-                );
-              }
-              if (userController.isUserLoggedIn == false) {
-                // show dialog
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CustomDialog(
-                      title: "Error",
-                      description: "You are not an admin",
-                      buttonText: "Login",
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, AdminAuthScreen.id);
-                      },
-                    );
-                  },
-                );
-              }
-              if (schoolController.categoryController.text.length <= 5 || schoolController.yearOfEstablishmentController.text.length <= 5) {
+              if (schoolController.nameController.text.length <= 5 || schoolController.sloganController.text.length <= 5 || schoolController.levelController.text.length <= 3) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',
@@ -306,7 +220,48 @@ class _SchoolSecondDetailsState extends State<SchoolSecondDetails> {
                 );
                 return;
               }
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const SchoolDetailsThird()));
+              // if user is logged in and not an admin
+              if (userController.isUserLoggedIn && userController.currentUserInfo.isAdmin == false) {
+                // show dialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CustomDialog(
+                      title: "Info",
+                      description: "You are not an admin",
+                      buttonText: "Login",
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, AdminAuthScreen.id);
+                      },
+                    );
+                  },
+                );
+              }
+              // if user is not logged in
+              if (userController.isUserLoggedIn == false) {
+                // show dialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CustomDialog(
+                      title: "Info",
+                      description: "You are not an admin",
+                      buttonText: "Login",
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, AdminAuthScreen.id);
+                      },
+                    );
+                  },
+                );
+              }
+
+              if (userController.isUserLoggedIn && userController.currentUserInfo.isAdmin == true) {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const CategoryAndYearOfEstablishment()));
+              } else {
+                return;
+              }
             },
           ),
         ],

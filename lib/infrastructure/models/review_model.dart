@@ -1,10 +1,12 @@
 class ReviewModel {
+  String? id;
   String? userId;
   String? schoolId;
   String? review;
   String? date;
 
   ReviewModel({
+    this.id,
     this.userId,
     this.schoolId,
     this.review,
@@ -14,6 +16,7 @@ class ReviewModel {
   // from json
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
     return ReviewModel(
+      id: json['uid'] ?? "",
       userId: json['userId'] ?? "",
       schoolId: json['schoolId'] ?? "",
       review: json['review'] ?? "",
@@ -21,9 +24,21 @@ class ReviewModel {
     );
   }
 
+  // to map
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'userId': userId,
+      'schoolId': schoolId,
+      'review': review,
+      'date': date,
+    };
+  }
+
   // to json
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'userId': userId,
       'schoolId': schoolId,
       'review': review,
@@ -33,6 +48,7 @@ class ReviewModel {
 
   // copy with
   ReviewModel copyWith({
+    String? id,
     String? userId,
     String? schoolId,
     String? review,
@@ -40,6 +56,7 @@ class ReviewModel {
     String? date,
   }) {
     return ReviewModel(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       schoolId: schoolId ?? this.schoolId,
       review: review ?? this.review,

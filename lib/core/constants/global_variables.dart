@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:school_profile/index.dart';
+import 'package:get_it/get_it.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 const kDefaultPadding = 20.0;
 
 const musicUnitMs = 6165;
+
+final GetIt locator = GetIt.instance; // locator for url launcher services
+
+CameraPosition get googlePlex => const CameraPosition(
+      target: LatLng(6.673175, -1.565423),
+      zoom: 18.4746,
+    );
+
+String get mapKey => 'AIzaSyCWG3_YJnepd_mVCfv-sAIDTkCAjkCSGqU';
 
 final kDefaultShadow = BoxShadow(
   offset: const Offset(0, 50),
@@ -31,9 +41,6 @@ const kDefaultOutlineInputBorder = OutlineInputBorder(
     color: Color(0xFFCEE4FD),
   ),
 );
-
-UserRepo userRepo = UserRepo();
-AuthRepo authRepo = AuthRepo();
 
 // home screen page controller
 late PageController pageController;

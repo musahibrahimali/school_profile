@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_profile/index.dart';
 
 class BlogsPage extends StatefulWidget {
   static const String id = "blogs_page";
@@ -9,14 +10,34 @@ class BlogsPage extends StatefulWidget {
 }
 
 class _BlogsPageState extends State<BlogsPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
-      ),
-      body: const Center(
-        child: Text('Home Page'),
+      key: _scaffoldKey,
+      backgroundColor: BrandColors.colorBackground,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // const MobileHeader(),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: kDefaultPadding / 2,
+                ),
+                child: const MobileImageCarousel(height: 300.0),
+              ),
+              Column(
+                children: List.generate(
+                  blogPosts.length,
+                  (index) => BlogPostCard(
+                    blog: blogPosts[index],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

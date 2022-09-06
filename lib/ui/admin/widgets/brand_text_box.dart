@@ -16,6 +16,7 @@ class BrandTextBox extends StatefulWidget {
   final Widget? prefixWidget;
   final Widget? suffixWidget;
   final bool? obscureText;
+  final int? maxLines;
 
   const BrandTextBox({
     Key? key,
@@ -32,6 +33,7 @@ class BrandTextBox extends StatefulWidget {
     this.onCompleted,
     this.prefixWidget,
     this.suffixWidget,
+    this.maxLines,
   }) : super(key: key);
 
   @override
@@ -43,6 +45,7 @@ class _BrandTextBoxState extends State<BrandTextBox> {
   Widget build(BuildContext context) {
     return TextFormField(
       obscureText: widget.obscureText ?? false,
+      maxLines: widget.maxLines ?? 1,
       onChanged: (val) => widget.onChanged!(val),
       onEditingComplete: widget.onCompleted == null
           ? () {

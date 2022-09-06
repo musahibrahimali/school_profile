@@ -1,2 +1,9 @@
+export 'about/index.dart';
+export 'contact/index.dart';
 export 'drawer/index.dart';
+export 'feedback_section/index.dart';
+export 'get_in_touch_card.dart';
+export 'hero_section/index.dart';
+export 'institution_section/index.dart';
+export 'static/index.dart';
 export 'will_pop_scope.dart';

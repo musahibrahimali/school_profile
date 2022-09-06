@@ -8,11 +8,14 @@ class BrandBottomNav extends StatelessWidget {
   final int index;
   final VoidCallback function;
   final bool isButtonDisabled;
+  final String? buttonText;
+
   const BrandBottomNav({
     Key? key,
     required this.index,
     required this.function,
     this.isButtonDisabled = false,
+    this.buttonText,
   }) : super(key: key);
 
   @override
@@ -55,7 +58,7 @@ class BrandBottomNav extends StatelessWidget {
                     child: Row(
                       children: <Widget>[
                         Text(
-                          "Next",
+                          buttonText ?? "Next",
                           style: TextStyle(
                             color: isButtonDisabled ? BrandColors.kGrey : Colors.white,
                           ),
