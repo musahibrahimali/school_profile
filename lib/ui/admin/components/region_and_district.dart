@@ -168,8 +168,8 @@ class _RegionAndDistrictState extends State<RegionAndDistrict> {
                             DropDownValueModel(name: 'Greater Accra Region', value: "Greater Accra Region"),
                           ],
                           onChanged: (val) {
-                            schoolController.regionController.text = val.value.toString();
-                            debugPrint("Selected value: ${schoolController.regionController.text}");
+                            regionController.text = val.value.toString();
+                            debugPrint("Selected value: ${regionController.text}");
                             FocusScope.of(context).unfocus();
                           },
                         ),
@@ -183,7 +183,7 @@ class _RegionAndDistrictState extends State<RegionAndDistrict> {
                           setState(() {});
                         },
                         label: "District (Optional)",
-                        controller: schoolController.districtController,
+                        controller: districtController,
                         keyboardType: TextInputType.text,
                         error: false,
                         errorMessage: "Invalid input",
@@ -198,9 +198,9 @@ class _RegionAndDistrictState extends State<RegionAndDistrict> {
 
           BrandBottomNav(
             index: 4,
-            isButtonDisabled: schoolController.regionController.text.length <= 3 ? true : false,
+            isButtonDisabled: regionController.text.length <= 3 ? true : false,
             function: () async {
-              if (schoolController.regionController.text.length <= 3) {
+              if (regionController.text.length <= 3) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',

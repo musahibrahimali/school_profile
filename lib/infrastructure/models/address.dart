@@ -57,6 +57,12 @@ class Address {
     );
   }
 
+  // to string
+  @override
+  String toString() {
+    return "$placeId $placeName $latitude $longitude $placeName $placeFormattedAddress";
+  }
+
   // copy with
   Address copyWith({
     String? placeId,

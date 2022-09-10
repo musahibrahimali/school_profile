@@ -11,10 +11,15 @@ class Assets {
   static const String carouselCarouselImage5 = 'assets/carousel/carousel_image_5.jpg';
   static const String carouselCarouselImage6 = 'assets/carousel/carousel_image_6.png';
   static const String carouselCarouselImage7 = 'assets/carousel/carousel_image_7.jpg';
+  static const String iconsChecklist = 'assets/icons/checklist.png';
   static const String iconsFeatherMessageSquare = 'assets/icons/feather_message_square.svg';
   static const String iconsFeatherShare2 = 'assets/icons/feather_share_2.svg';
   static const String iconsFeatherThumbsUp = 'assets/icons/feather_thumbs_up.svg';
+  static const String iconsGithub = 'assets/icons/github.png';
+  static const String iconsLocationPin = 'assets/icons/location_pin.png';
   static const String iconsProfileIcon = 'assets/icons/profile_icon.png';
+  static const String iconsPulse = 'assets/icons/pulse.png';
+  static const String iconsSadSmiley = 'assets/icons/sad_smiley.png';
   static const String images0 = 'assets/images/0.png';
   static const String images1 = 'assets/images/1.png';
   static const String images2 = 'assets/images/2.png';
@@ -54,4 +59,12 @@ class Assets {
   static const String studentsStudentTen = 'assets/core/students/student_ten.png';
   static const String studentsStudentThree = 'assets/core/students/student_three.png';
   static const String studentsStudentTwo = 'assets/core/students/student_two.png';
+  static const String updatesNews = 'assets/updates/news.png';
+  static const String updatesNews1 = 'assets/updates/news1.png';
+  static const String updatesNews2 = 'assets/updates/news2.png';
+  static const String updatesNews4 = 'assets/updates/news4.png';
+  static const String updatesNews5 = 'assets/updates/news5.png';
+  static const String updatesNews6 = 'assets/updates/news6.png';
+  static const String updatesNews7 = 'assets/updates/news7.png';
+  static const String updatesUpdates = 'assets/updates/updates.png';
 }

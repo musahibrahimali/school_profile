@@ -188,9 +188,9 @@ class _ImagesAndVideosState extends State<ImagesAndVideos> {
           BrandBottomNav(
             index: 12,
             buttonText: "Proceed",
-            isButtonDisabled: schoolController.extraCurricularController.text.length <= 1 ? true : false,
+            isButtonDisabled: extraCurricularController.text.length <= 1 ? true : false,
             function: () async {
-              if (schoolController.extraCurricularController.text.length <= 3) {
+              if (extraCurricularController.text.length <= 3) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',

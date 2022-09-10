@@ -108,7 +108,7 @@ class _HeadTeacherAndStudentPopulationState extends State<HeadTeacherAndStudentP
                           setState(() {});
                         },
                         label: "Head Teacher (master/Proprietor)",
-                        controller: schoolController.headTeacherController,
+                        controller: headTeacherController,
                         keyboardType: TextInputType.text,
                         error: false,
                         errorMessage: "Invalid input",
@@ -122,7 +122,7 @@ class _HeadTeacherAndStudentPopulationState extends State<HeadTeacherAndStudentP
                           setState(() {});
                         },
                         label: "Student Population",
-                        controller: schoolController.studentsPopulationController,
+                        controller: studentsPopulationController,
                         keyboardType: TextInputType.number,
                         error: false,
                         errorMessage: "Invalid input",
@@ -137,9 +137,9 @@ class _HeadTeacherAndStudentPopulationState extends State<HeadTeacherAndStudentP
 
           BrandBottomNav(
             index: 5,
-            isButtonDisabled: (schoolController.headTeacherController.text.length <= 3 || schoolController.studentsPopulationController.text.isEmpty) ? true : false,
+            isButtonDisabled: (headTeacherController.text.length <= 3 || studentsPopulationController.text.isEmpty) ? true : false,
             function: () async {
-              if (schoolController.headTeacherController.text.length <= 3 || schoolController.studentsPopulationController.text.isEmpty) {
+              if (headTeacherController.text.length <= 3 || studentsPopulationController.text.isEmpty) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',

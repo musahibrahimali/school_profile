@@ -111,7 +111,7 @@ class _ExtraCurricularAndAvatarState extends State<ExtraCurricularAndAvatar> {
                         },
                         maxLines: 5,
                         label: "Extra curricular activities",
-                        controller: schoolController.extraCurricularController,
+                        controller: extraCurricularController,
                         keyboardType: TextInputType.multiline,
                         error: false,
                         errorMessage: "Invalid input",
@@ -193,9 +193,9 @@ class _ExtraCurricularAndAvatarState extends State<ExtraCurricularAndAvatar> {
 
           BrandBottomNav(
             index: 11,
-            isButtonDisabled: schoolController.extraCurricularController.text.length <= 3 ? true : false,
+            isButtonDisabled: extraCurricularController.text.length <= 3 ? true : false,
             function: () async {
-              if (schoolController.extraCurricularController.text.length <= 3) {
+              if (extraCurricularController.text.length <= 3) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',

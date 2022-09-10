@@ -62,7 +62,7 @@ class _SchoolMapViewState extends State<SchoolMapView> {
 
     /// confirm location
     await HelperFunctions.findCoordinateAddress(position, context);
-    schoolController.searchAddressController.text = schoolController.addressPoint.placeName!;
+    searchAddressController.text = schoolController.addressPoint.placeName!;
   }
 
   @override
@@ -140,19 +140,19 @@ class _SchoolMapViewState extends State<SchoolMapView> {
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: TextFormField(
-                        controller: schoolController.searchAddressController,
+                        controller: searchAddressController,
                         keyboardType: TextInputType.text,
                         textAlign: TextAlign.start,
                         onFieldSubmitted: (value) {
                           schoolController.addressPointList.clear();
-                          schoolController.searchAddressController.clear();
-                          schoolController.searchAddressController.text = schoolController.addressPoint.placeName!;
+                          searchAddressController.clear();
+                          searchAddressController.text = schoolController.addressPoint.placeName!;
                           setState(() {});
                         },
                         onEditingComplete: () {
                           schoolController.addressPointList.clear();
-                          schoolController.searchAddressController.clear();
-                          schoolController.searchAddressController.text = schoolController.addressPoint.placeName!;
+                          searchAddressController.clear();
+                          searchAddressController.text = schoolController.addressPoint.placeName!;
                           setState(() {});
                         },
                         onChanged: (value) async {
@@ -211,7 +211,7 @@ class _SchoolMapViewState extends State<SchoolMapView> {
                     onPressed: () async {
                       schoolController.addressPointList = [];
                       List<Prediction>? thisList = await HelperFunctions.searchPickUpPoint(
-                        schoolController.searchAddressController.text.trim(),
+                        searchAddressController.text.trim(),
                       );
                       if (thisList!.isNotEmpty) {
                         schoolController.addressPointList = thisList;

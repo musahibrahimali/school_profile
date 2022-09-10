@@ -108,7 +108,7 @@ class _EmailAndPhoneState extends State<EmailAndPhone> {
                           setState(() {});
                         },
                         label: "School Email (Optional)",
-                        controller: schoolController.schoolEmailController,
+                        controller: schoolEmailController,
                         keyboardType: TextInputType.emailAddress,
                         error: false,
                         errorMessage: "Invalid input",
@@ -122,7 +122,7 @@ class _EmailAndPhoneState extends State<EmailAndPhone> {
                           setState(() {});
                         },
                         label: "Phone Number",
-                        controller: schoolController.schoolPhoneNumberController,
+                        controller: schoolPhoneNumberController,
                         keyboardType: TextInputType.number,
                         error: false,
                         errorMessage: "Invalid input",
@@ -137,9 +137,9 @@ class _EmailAndPhoneState extends State<EmailAndPhone> {
 
           BrandBottomNav(
             index: 2,
-            isButtonDisabled: schoolController.schoolPhoneNumberController.text.length != 10 ? true : false,
+            isButtonDisabled: schoolPhoneNumberController.text.length != 10 ? true : false,
             function: () async {
-              if (schoolController.schoolPhoneNumberController.text.length != 10) {
+              if (schoolPhoneNumberController.text.length != 10) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',

@@ -15,6 +15,11 @@ class _HomePageState extends State<HomePage> {
   List<SchoolModel> firstThreeSchools = schoolController.schools.length > 3 ? schoolController.schools.sublist(0, 3) : schoolController.schools;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -23,7 +28,6 @@ class _HomePageState extends State<HomePage> {
             children: const <Widget>[
               MobileHeader(),
               MobileInstitutionSection(),
-              // MobileImageCarousel(),
               MobileHeroSection(),
               MobileFeedBackSection(),
               MobileFooter(),

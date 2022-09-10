@@ -13,6 +13,12 @@ class ReviewModel {
     this.date,
   });
 
+  // to string
+  @override
+  String toString() {
+    return "$id $userId $schoolId $review $date";
+  }
+
   // from json
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
     return ReviewModel(

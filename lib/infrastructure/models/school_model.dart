@@ -30,8 +30,8 @@ class SchoolModel {
   String? avatar;
   List<dynamic>? images;
   List<dynamic>? videos;
-  List<ReviewModel>? reviews;
-  List<LikesModel>? likes;
+  List<dynamic>? reviews;
+  List<dynamic>? likes;
 
   SchoolModel({
     this.id,
@@ -180,6 +180,12 @@ class SchoolModel {
     };
   }
 
+  // to string
+  @override
+  String toString() {
+    return 'SchoolModel{id: $id, userId: $userId, name: $name, address: $address, mapAddress: $mapAddress, nameOfHeadTeacher: $nameOfHeadTeacher, yearOfEstablishment: $yearOfEstablishment, slogan: $slogan, region: $region, district: $district, town: $town, studentsPopulation: $studentsPopulation, teachersPopulation: $teachersPopulation, nonTeachingStaffPopulation: $nonTeachingStaffPopulation, rating: $rating, awards: $awards, history: $history, facilities: $facilities, performance: $performance, emailAddress: $emailAddress, phoneNumber: $phoneNumber, category: $category, level: $level, images: $images, videos: $videos, reviews: $reviews, likes: $likes, avatar: $avatar, feeRange: $feeRange, extraCurricular: $extraCurricular}';
+  }
+
   // copy with
   SchoolModel copyWith({
     String? id,
@@ -207,8 +213,8 @@ class SchoolModel {
     String? level,
     List<dynamic>? images,
     List<dynamic>? videos,
-    List<ReviewModel>? reviews,
-    List<LikesModel>? likes,
+    List<dynamic>? reviews,
+    List<dynamic>? likes,
     String? avatar,
     String? feeRange,
     String? extraCurricular,

@@ -43,11 +43,6 @@ class _NameAndSloganState extends State<NameAndSlogan> {
       key: _scaffoldKey,
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        backgroundColor: const Color(0xffF06A66),
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
-      ),
       body: Stack(
         children: [
           // background container
@@ -110,7 +105,7 @@ class _NameAndSloganState extends State<NameAndSlogan> {
                           setState(() {});
                         },
                         label: "School Name",
-                        controller: schoolController.nameController,
+                        controller: nameController,
                         keyboardType: TextInputType.text,
                         error: false,
                         errorMessage: "Invalid input",
@@ -123,8 +118,8 @@ class _NameAndSloganState extends State<NameAndSlogan> {
                         onChanged: (val) {
                           setState(() {});
                         },
-                        label: "Motto",
-                        controller: schoolController.sloganController,
+                        label: "Motto", //
+                        controller: sloganController,
                         keyboardType: TextInputType.text,
                         error: false,
                         errorMessage: "Invalid input",
@@ -135,7 +130,6 @@ class _NameAndSloganState extends State<NameAndSlogan> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),
                       child: DropDownTextField(
-                        // singleController: _cnt,
                         clearOption: false,
                         enableSearch: false,
                         initialValue: "Select School Level",
@@ -172,8 +166,8 @@ class _NameAndSloganState extends State<NameAndSlogan> {
                             return null;
                           }
                         },
-                        dropDownItemCount: 4,
-                        dropDownList: const [
+                        dropDownItemCount: 5,
+                        dropDownList: const <DropDownValueModel>[
                           DropDownValueModel(name: 'Day Care', value: "Day Care"),
                           DropDownValueModel(name: 'Pre School', value: "Pre School"),
                           DropDownValueModel(name: 'Creche/Kindergarten', value: "Creche/Kindergarten"),
@@ -181,8 +175,8 @@ class _NameAndSloganState extends State<NameAndSlogan> {
                           DropDownValueModel(name: 'Junior High School', value: "Junior High School"),
                         ],
                         onChanged: (val) {
-                          schoolController.levelController.text = val.value.toString();
-                          debugPrint("Selected value: ${schoolController.levelController.text}");
+                          levelController.text = val.value.toString();
+                          debugPrint("Selected value: ${levelController.text}");
                           FocusScope.of(context).unfocus();
                         },
                       ),
@@ -196,10 +190,9 @@ class _NameAndSloganState extends State<NameAndSlogan> {
 
           BrandBottomNav(
             index: 0,
-            isButtonDisabled:
-                (schoolController.nameController.text.length <= 5 || schoolController.sloganController.text.length <= 5 || schoolController.levelController.text.length <= 3) ? true : false,
+            isButtonDisabled: (nameController.text.length <= 5 || sloganController.text.length <= 5 || levelController.text.length <= 3) ? true : false,
             function: () async {
-              if (schoolController.nameController.text.length <= 5 || schoolController.sloganController.text.length <= 5 || schoolController.levelController.text.length <= 3) {
+              if (nameController.text.length <= 5 || sloganController.text.length <= 5 || levelController.text.length <= 3) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',

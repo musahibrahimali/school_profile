@@ -161,8 +161,8 @@ class _CategoryAndYearOfEstablishmentState extends State<CategoryAndYearOfEstabl
                           DropDownValueModel(name: 'Hybrid', value: "Hybrid"),
                         ],
                         onChanged: (val) {
-                          schoolController.categoryController.text = val.value.toString();
-                          debugPrint("Selected value: ${schoolController.categoryController.text}");
+                          categoryController.text = val.value.toString();
+                          debugPrint("Selected value: ${categoryController.text}");
                           FocusScope.of(context).unfocus();
                         },
                       ),
@@ -202,8 +202,8 @@ class _CategoryAndYearOfEstablishmentState extends State<CategoryAndYearOfEstabl
                           color: BrandColors.white,
                         ),
                         onChanged: (val) {
-                          schoolController.yearOfEstablishmentController.text = val;
-                          debugPrint("year established ${schoolController.yearOfEstablishmentController.text}");
+                          yearOfEstablishmentController.text = val;
+                          debugPrint("year established ${yearOfEstablishmentController.text}");
                         },
                         validator: (val) {
                           debugPrint(val);
@@ -221,9 +221,9 @@ class _CategoryAndYearOfEstablishmentState extends State<CategoryAndYearOfEstabl
 
           BrandBottomNav(
             index: 1,
-            isButtonDisabled: (schoolController.categoryController.text.length <= 3 || schoolController.yearOfEstablishmentController.text.length <= 3) ? true : false,
+            isButtonDisabled: (categoryController.text.length <= 3 || yearOfEstablishmentController.text.length <= 3) ? true : false,
             function: () async {
-              if (schoolController.categoryController.text.length <= 3 || schoolController.yearOfEstablishmentController.text.length <= 3) {
+              if (categoryController.text.length <= 3 || yearOfEstablishmentController.text.length <= 3) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',

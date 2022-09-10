@@ -139,6 +139,15 @@ class FirebaseCaller {
     reference.snapshots().listen(null);
   }
 
+  // delete field value
+  Future<void> deleteFieldValue({
+    required String path,
+    required String field,
+  }) async {
+    final DocumentReference<Map<String, dynamic>> reference = _firebaseFirestore.doc(path);
+    await reference.update({field: FieldValue.delete()});
+  }
+
   // FireBaseStorage
   Future<String?> uploadImage({required String path, required File file}) async {
     UploadTask _uploadTask = _firebaseStorage.ref().child(path).putFile(file);

@@ -8,6 +8,73 @@ import 'package:school_profile/index.dart';
 class SchoolController extends GetxController {
   static SchoolController instance = Get.find();
   bool isSchoolLocationChosen = false;
+
+  final _activeIndex = 1.obs;
+
+  final _isUsingSearch = false.obs;
+
+  // boolean for filter conditions
+  final _isName = true.obs;
+  final _isLocation = true.obs;
+  final _isCategory = false.obs;
+  final _isLevel = false.obs;
+  final _isFeeRange = false.obs;
+  final _isRegion = false.obs;
+  final _isTown = false.obs;
+  final _isRating = false.obs;
+  final _isPopular = false.obs;
+
+  void changeIsUsingSearch(bool value) {
+    _isUsingSearch.value = value;
+  }
+
+  void handleSortBy({required int index}) {
+    // set all booleans to false
+    _isName.value = false;
+    _isLocation.value = false;
+    _isCategory.value = false;
+    _isLevel.value = false;
+    _isFeeRange.value = false;
+    _isRegion.value = false;
+    _isTown.value = false;
+    _isRating.value = false;
+    _isPopular.value = false;
+    // set the boolean at the index to true
+    switch (index) {
+      case 1:
+        _isName.value = true;
+        break;
+      case 2:
+        _isLocation.value = true;
+        break;
+      case 3:
+        _isCategory.value = true;
+        break;
+      case 4:
+        _isLevel.value = true;
+        break;
+      case 5:
+        _isFeeRange.value = true;
+        break;
+      case 6:
+        _isRegion.value = true;
+        break;
+      case 7:
+        _isRating.value = true;
+        break;
+      case 8:
+        _isRating.value = true;
+        break;
+      case 9:
+        _isPopular.value = true;
+        break;
+      default:
+        _isName.value = true;
+        break;
+    }
+    sortBy();
+  }
+
   // files
   List<XFile>? images;
   List<File>? imageFiles;
@@ -15,45 +82,14 @@ class SchoolController extends GetxController {
   File? avatarImage;
   // create a list of all schools
   final allSchools = <SchoolModel>[].obs;
+  final allReviews = <ReviewModel>[].obs;
   List<Prediction> addressPointList = []; // list of address points
+  final _filteredSchoolList = <SchoolModel>[].obs; // list of address points
   late Address _addressPoint;
   // school model to upload
   SchoolModel schoolModelToDatabase = SchoolModel();
   ReviewModel reviewModelForDatabase = ReviewModel();
   LikesModel likesModelForDatabase = LikesModel();
-  // search place controller
-  TextEditingController searchAddressController = TextEditingController();
-  TextEditingController searchSchoolController = TextEditingController();
-  // review text editing controller
-  TextEditingController reviewUserIdController = TextEditingController();
-  TextEditingController reviewContentController = TextEditingController();
-  TextEditingController reviewSchoolController = TextEditingController();
-  TextEditingController reviewDateController = TextEditingController();
-
-  // text editing controllers
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController categoryController = TextEditingController();
-  final TextEditingController levelController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController townController = TextEditingController();
-  final TextEditingController headTeacherController = TextEditingController();
-  final TextEditingController mapAddressController = TextEditingController();
-  final TextEditingController yearOfEstablishmentController = TextEditingController();
-  final TextEditingController sloganController = TextEditingController();
-  final TextEditingController regionController = TextEditingController();
-  final TextEditingController districtController = TextEditingController();
-  final TextEditingController studentsPopulationController = TextEditingController();
-  final TextEditingController teachersPopulationController = TextEditingController();
-  final TextEditingController extraCurricularController = TextEditingController();
-  final TextEditingController nonTeachingStaffPopulationController = TextEditingController();
-  final TextEditingController ratingController = TextEditingController();
-  final TextEditingController awardsController = TextEditingController();
-  final TextEditingController historyController = TextEditingController();
-  final TextEditingController facilitiesController = TextEditingController();
-  final TextEditingController performanceController = TextEditingController();
-  final TextEditingController feeRangeController = TextEditingController();
-  final TextEditingController schoolEmailController = TextEditingController();
-  final TextEditingController schoolPhoneNumberController = TextEditingController();
 
   // add school to all schools
   void addSchool(SchoolModel? school) {
@@ -64,13 +100,25 @@ class SchoolController extends GetxController {
   void addAllSchools(List<SchoolModel> schools) {
     // first clear all the schools
     allSchools.clear();
-    debugPrint("schools before: ${allSchools.length}");
+    _filteredSchoolList.clear();
+    // debugPrint("schools before: ${allSchools.length}");
     allSchools.addAll(schools);
-    debugPrint("schools after: ${allSchools.length}");
+    // debugPrint("schools after: ${allSchools.length}");
+    filterSchools(""); // filter schools with nothing
+    handleSortBy(index: 0);
+  }
+
+  void addAllReviews(List<ReviewModel> reviews) {
+    // first clear all the schools
+    allSchools.clear();
+    _filteredSchoolList.clear();
+    // debugPrint("schools before: ${allSchools.length}");
+    allSchools.addAll(schools);
+    // debugPrint("schools after: ${allSchools.length}");
   }
 
   // update destination address
-  updateAddressPoint(Address mapAddress) {
+  void updateAddressPoint(Address mapAddress) {
     _addressPoint = mapAddress;
     // set the school map address controller text to the address point name
     mapAddressController.text = _addressPoint.placeName!;
@@ -81,13 +129,13 @@ class SchoolController extends GetxController {
   }
 
   // update search school controller
-  updateSearchSchool(String string) {
+  void updateSearchSchool(String string) {
     searchSchoolController.clear();
     searchSchoolController.text = string;
   }
 
   // clear address point
-  clearAddressPoint() {
+  void clearAddressPoint() {
     _addressPoint = Address();
     mapAddressController.clear();
     searchAddressController.clear();
@@ -201,16 +249,98 @@ class SchoolController extends GetxController {
   }
 
   // update school model images
-  updateSchoolModelImages(List<dynamic> images) {
+  void updateSchoolModelImages(List<dynamic> images) {
     schoolModelToDatabase.images = images;
   }
 
   // update school avatar image
-  updateSchoolModelAvatarImage(String avatarImage) {
+  void updateSchoolModelAvatarImage(String avatarImage) {
     schoolModelToDatabase.avatar = avatarImage;
   }
 
-  // getter for all schools
+  // reset the list of filtered schools
+  void clearFilteredSchools() {
+    _filteredSchoolList.value = [];
+  }
+
+  // filter with boolean
+  void sortBy() {
+    clearFilteredSchools();
+    allSchools.where((school) {
+      _filteredSchoolList.add(school);
+      // if isName is true, add to the list of filtered schools in alphabetical order by name
+      if (_isName.value) {
+        _filteredSchoolList.sort((a, b) => a.name!.compareTo(b.name!));
+      }
+      if (_isLocation.value) {
+        _filteredSchoolList.sort((a, b) => a.mapAddress!.placeName!.compareTo(b.mapAddress!.placeName!));
+      }
+      if (_isCategory.value) {
+        _filteredSchoolList.sort((a, b) => a.category!.compareTo(b.category!));
+      }
+      if (_isLevel.value) {
+        _filteredSchoolList.sort((a, b) => a.level!.compareTo(b.level!));
+      }
+      if (_isFeeRange.value) {
+        _filteredSchoolList.sort((a, b) => a.feeRange!.compareTo(b.feeRange!));
+      }
+      if (_isRegion.value) {
+        _filteredSchoolList.sort((a, b) => a.region!.compareTo(b.region!));
+      }
+      if (_isTown.value) {
+        _filteredSchoolList.sort((a, b) => a.town!.compareTo(b.town!));
+      }
+      if (_isRating.value) {
+        _filteredSchoolList.sort((a, b) => a.rating!.compareTo(b.rating!));
+      }
+      if (_isPopular.value) {
+        _filteredSchoolList.sort((a, b) => a.likes!.length.compareTo(b.likes!.length));
+      }
+      return true;
+    }).toList();
+  }
+
+  // filter the list of schools based on a search string
+  void filterSchools(String searchString) {
+    clearFilteredSchools();
+    allSchools.where((school) {
+      if (school.name!.toLowerCase().contains(searchString.toLowerCase()) ||
+          school.category!.toLowerCase().contains(searchString.toLowerCase()) ||
+          school.region!.toLowerCase().contains(searchString.toLowerCase()) ||
+          school.district!.toLowerCase().contains(searchString.toLowerCase()) ||
+          school.slogan!.toLowerCase().contains(searchString.toLowerCase()) ||
+          school.category!.toLowerCase().contains(searchString.toLowerCase()) ||
+          school.address!.toLowerCase().contains(searchString.toLowerCase()) ||
+          school.level!.toLowerCase().contains(searchString.toLowerCase()) ||
+          school.feeRange!.toLowerCase().contains(searchString.toLowerCase()) ||
+          school.feeRange!.toLowerCase().contains(searchString.toLowerCase()) ||
+          school.mapAddress!.placeName!.toLowerCase().contains(searchString.toLowerCase()) ||
+          school.town!.toLowerCase().contains(searchString.toLowerCase())) {
+        // add the school to the filtered list
+        debugPrint("found an item $searchString");
+        _filteredSchoolList.add(school);
+      } else {
+        debugPrint("no item found an item $searchString");
+      }
+      // filter the list and return the school
+      return true;
+    }).toList();
+  }
+
+  // getters
+  bool get isName => _isName.value;
+  bool get isLocation => _isLocation.value;
+  bool get isCategory => _isCategory.value;
+  bool get isLevel => _isLevel.value;
+  bool get isFeeRange => _isFeeRange.value;
+  bool get isRegion => _isRegion.value;
+  bool get isTown => _isRegion.value;
+  bool get isRating => _isRating.value;
+  bool get isPopular => _isPopular.value;
+  bool get isUsingSearch => _isUsingSearch.value;
+  int get activeIndex => _activeIndex.value;
   List<SchoolModel> get schools => allSchools;
+  List<ReviewModel> get reviews => allReviews;
+  List<SchoolModel> get filteredSchoolList => _filteredSchoolList;
   Address get addressPoint => _addressPoint;
 }

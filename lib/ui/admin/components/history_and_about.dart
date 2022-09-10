@@ -110,7 +110,7 @@ class _HistoryAndAboutState extends State<HistoryAndAbout> {
                         },
                         maxLines: 12,
                         label: "History/about",
-                        controller: schoolController.historyController,
+                        controller: historyController,
                         keyboardType: TextInputType.multiline,
                         error: false,
                         errorMessage: "Invalid input",
@@ -125,9 +125,9 @@ class _HistoryAndAboutState extends State<HistoryAndAbout> {
 
           BrandBottomNav(
             index: 7,
-            isButtonDisabled: (schoolController.historyController.text.length <= 150) ? true : false,
+            isButtonDisabled: (historyController.text.length <= 150) ? true : false,
             function: () async {
-              if (schoolController.historyController.text.length <= 150) {
+              if (historyController.text.length <= 150) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',

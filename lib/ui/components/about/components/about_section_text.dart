@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:school_profile/index.dart';
 
 class MobileAboutSectionText extends StatelessWidget {
@@ -13,13 +14,15 @@ class MobileAboutSectionText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 4),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontWeight: FontWeight.w300,
-          color: BrandColors.kCustomTextColor,
-          height: 1.5,
+      child: Obx(
+        () => Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.w300,
+            color: themeController.isLightTheme ? BrandColors.kCustomTextColor : BrandColors.colorWhiteAccent,
+            height: 1.5,
+          ),
         ),
       ),
     );

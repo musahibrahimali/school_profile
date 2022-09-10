@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:school_profile/index.dart';
 
 class DefaultButton extends StatelessWidget {
@@ -36,7 +37,12 @@ class DefaultButton extends StatelessWidget {
           children: [
             Image.asset(imageSrc, height: 40),
             const SizedBox(width: kDefaultPadding),
-            Text(text),
+            Text(
+              text,
+              style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w900,
+              ),
+            ),
           ],
         ),
       ),

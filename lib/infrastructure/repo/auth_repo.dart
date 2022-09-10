@@ -78,6 +78,8 @@ class AuthRepo {
     try {
       await FirebaseAuth.instance.signOut();
       userController.initUser();
+      HelperMethods.getAllSchools();
+      HelperMethods.getAllReviews();
     } catch (e) {
       debugPrint(e.toString());
     }

@@ -1,30 +1,45 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:school_profile/index.dart';
 
-class MobileInstitutionCard extends StatefulWidget {
+class InstitutionCard extends StatefulWidget {
   final SchoolModel schoolModel;
-  final void Function() press;
+  final void Function() onLike;
+  final void Function() onPressed;
 
-  const MobileInstitutionCard({
+  const InstitutionCard({
     Key? key,
     required this.schoolModel,
-    required this.press,
+    required this.onPressed,
+    required this.onLike,
   }) : super(key: key);
 
   @override
-  State<MobileInstitutionCard> createState() => _MobileInstitutionCardState();
+  State<InstitutionCard> createState() => _InstitutionCardState();
 }
 
-class _MobileInstitutionCardState extends State<MobileInstitutionCard> {
+class _InstitutionCardState extends State<InstitutionCard> {
   bool isLiked = false;
+
   @override
   Widget build(BuildContext context) {
+    for (dynamic like in widget.schoolModel.likes!) {
+      if (like['user_id'] == userController.currentUserInfo.uid) {
+        setState(() {
+          isLiked = true;
+        });
+      } else {
+        setState(() {
+          isLiked = false;
+        });
+      }
+    }
+
     return InkWell(
-      onTap: widget.press,
+      onTap: widget.onPressed,
       child: Obx(
         () => AnimatedContainer(
           duration: const Duration(milliseconds: 200),
@@ -41,38 +56,40 @@ class _MobileInstitutionCardState extends State<MobileInstitutionCard> {
           ),
           child: Row(
             children: [
-              // sow a network image if the image is not null
-              // else show a placeholder image
-              if (widget.schoolModel.images != null || widget.schoolModel.images!.isNotEmpty)
-                Container(
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  bottomLeft: Radius.circular(20.0),
+                ),
+                child: CachedNetworkImage(
                   width: 180.0.w,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      bottomLeft: Radius.circular(20.0),
-                    ),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        widget.schoolModel.images![0],
+                  height: 320.0,
+                  imageUrl: widget.schoolModel.avatar ?? widget.schoolModel.images![0],
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    width: 180.0.w,
+                    height: 320.0,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(Assets.updatesNews),
+                        fit: BoxFit.cover,
                       ),
-                      fit: BoxFit.cover,
                     ),
                   ),
+                  errorWidget: (context, url, dynamic) {
+                    return Container(
+                      width: 180.0.w,
+                      height: 320.0,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(Assets.updatesNews),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              if (widget.schoolModel.images == null || widget.schoolModel.images!.isEmpty)
-                Container(
-                  width: 180.0.w,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      bottomLeft: Radius.circular(20.0),
-                    ),
-                    image: DecorationImage(
-                      image: AssetImage(Assets.imagesWork1),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -88,30 +105,28 @@ class _MobileInstitutionCardState extends State<MobileInstitutionCard> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Expanded(child: Container()),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                isLiked = !isLiked;
-                              });
-                            },
-                            icon: !isLiked
-                                ? Icon(
-                                    LineAwesomeIcons.heart,
-                                    color: BrandColors.kGrey,
-                                    size: 50.0,
-                                  )
-                                : Icon(
-                                    Icons.favorite,
-                                    color: BrandColors.kErrorColor,
-                                    size: 50.0,
-                                  ),
+                          GestureDetector(
+                            onTap: widget.onLike,
+                            child: Container(
+                              child: isLiked
+                                  ? Icon(
+                                      Icons.favorite,
+                                      color: BrandColors.kErrorColor,
+                                      size: 50.0,
+                                    )
+                                  : Icon(
+                                      Icons.favorite,
+                                      color: themeController.isLightTheme ? BrandColors.colorLightGray : BrandColors.colorLightGray,
+                                      size: 50.0,
+                                    ),
+                            ),
                           ),
                         ],
                       ),
                       Expanded(child: Container()),
                       Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           CustomTextWidget(
                             text: widget.schoolModel.name!.toUpperCase(),
@@ -122,7 +137,6 @@ class _MobileInstitutionCardState extends State<MobileInstitutionCard> {
                           ),
                           const SizedBox(height: kDefaultPadding / 2),
                           CustomTextWidget(
-                            // text: "motto",
                             text: widget.schoolModel.slogan!,
                             color: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
                             maxLines: 5,

@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:school_profile/index.dart';
 
 class HelperMethods {
@@ -29,6 +31,87 @@ class HelperMethods {
     } else {
       return false;
     }
+  }
+
+  static Future<double> getDistance({
+    required double fromLat,
+    required double fromLng,
+    required double toLat,
+    required double toLng,
+  }) async {
+    // convert the lat and lng to double
+    double fromLatDouble = fromLat;
+    double fromLngDouble = fromLng;
+    double toLatDouble = toLat;
+    double toLngDouble = toLng;
+    // get the distance between two points
+    double distanceInMeters = Geolocator.distanceBetween(fromLatDouble, fromLngDouble, toLatDouble, toLngDouble);
+    // convert the distance to kilometers
+    double distanceInKm = distanceInMeters / 1000;
+    // return the distance in kilometers
+    return distanceInKm;
+  }
+
+  static Future<void> _askAllPermissions() async {
+    if (await Permission.location.isDenied) {
+      await Permission.location.request();
+    }
+    if (await Permission.accessMediaLocation.isDenied) {
+      await Permission.accessMediaLocation.request();
+    }
+    if (await Permission.phone.isDenied) {
+      await Permission.phone.request();
+    }
+  }
+
+  static Future<void> _askLocationPermission() async {
+    if (await Permission.location.isDenied) {
+      await Permission.location.request();
+    }
+  }
+
+  static Future<void> _askMediaPermission() async {
+    if (await Permission.accessMediaLocation.isDenied) {
+      await Permission.accessMediaLocation.request();
+    }
+  }
+
+  static Future<void> _askPhonePermission() async {
+    if (await Permission.phone.isDenied) {
+      await Permission.phone.request();
+    }
+  }
+
+  static Future<void> askPermissions({int index = 0}) async {
+    switch (index) {
+      case 0:
+        await _askAllPermissions();
+        break;
+      case 1:
+        _askLocationPermission();
+        break;
+      case 2:
+        _askMediaPermission();
+        break;
+      case 3:
+        _askPhonePermission();
+        break;
+      default:
+        _askAllPermissions();
+        break;
+    }
+  }
+
+  static Future<void> setupPositionLocator({required BuildContext context}) async {
+    /// set up position locator
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.bestForNavigation,
+    );
+    currentPosition = position;
+
+    /// confirm location
+    await HelperFunctions.findCoordinateAddress(position, context);
+    debugPrint("current location place name ${searchSchoolController.text}");
   }
 
   // register user using auth repo
@@ -121,8 +204,28 @@ class HelperMethods {
           }
         }
       }
-      debugPrint("schools: $_schools");
+      // debugPrint("schools: $_schools");
       schoolController.addAllSchools(_schools);
+    });
+  }
+
+  // get all reviews
+  static void getAllReviews() async {
+    Stream<List<ReviewModel?>> allSchools = subscribeToReviews();
+    List<ReviewModel> _reviews = [];
+    // get the snapshot data from all schools
+    allSchools.listen((List<ReviewModel?> reviews) {
+      // debugPrint("all schools: $schools");
+      if (reviews.isNotEmpty) {
+        // loop through the schools and add to the schools list
+        for (ReviewModel? reviews in reviews) {
+          if (reviews != null) {
+            _reviews.add(reviews);
+          }
+        }
+      }
+      // debugPrint("schools: $_schools");
+      schoolController.addAllReviews(_reviews);
     });
   }
 
@@ -135,7 +238,7 @@ class HelperMethods {
     if (response.isRight()) {
       response.fold(
         (error) => debugPrint(error.toString()),
-        (schoolModel) => debugPrint("school updated ${schoolModel.toJson()}"),
+        (schoolModel) => () {},
       );
       return true;
     } else {
@@ -187,7 +290,7 @@ class HelperMethods {
     if (response.isRight()) {
       response.fold(
         (error) => debugPrint(error.toString()),
-        (reviewModel) => debugPrint("review added ${reviewModel.toJson()}"),
+        (reviewModel) => () {},
       );
       return true;
     } else {
@@ -209,7 +312,7 @@ class HelperMethods {
     if (response.isRight()) {
       response.fold(
         (error) => debugPrint(error.toString()),
-        (reviewModel) => debugPrint("review updated ${reviewModel.toJson()}"),
+        (reviewModel) => () {},
       );
       return true;
     } else {

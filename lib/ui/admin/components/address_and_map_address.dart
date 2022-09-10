@@ -108,7 +108,7 @@ class _AddressAndMapAddressState extends State<AddressAndMapAddress> {
                           setState(() {});
                         },
                         label: "School Address",
-                        controller: schoolController.addressController,
+                        controller: addressController,
                         keyboardType: TextInputType.text,
                         error: false,
                         errorMessage: "Invalid input",
@@ -122,7 +122,7 @@ class _AddressAndMapAddressState extends State<AddressAndMapAddress> {
                           setState(() {});
                         },
                         label: "Town",
-                        controller: schoolController.townController,
+                        controller: townController,
                         keyboardType: TextInputType.text,
                         error: false,
                         errorMessage: "Invalid input",
@@ -148,7 +148,7 @@ class _AddressAndMapAddressState extends State<AddressAndMapAddress> {
                           ),
                         ),
                         child: CustomText(
-                          text: schoolController.mapAddressController.text.isNotEmpty ? schoolController.mapAddressController.text : "School GPS Address",
+                          text: mapAddressController.text.isNotEmpty ? mapAddressController.text : "School GPS Address",
                           color: BrandColors.colorWhiteAccent,
                           fontSize: 18.0,
                           fontWeight: FontWeight.w600,
@@ -164,9 +164,9 @@ class _AddressAndMapAddressState extends State<AddressAndMapAddress> {
 
           BrandBottomNav(
             index: 3,
-            isButtonDisabled: (schoolController.addressController.text.length <= 3 || schoolController.mapAddressController.text.length <= 3) ? true : false,
+            isButtonDisabled: (addressController.text.length <= 3 || mapAddressController.text.length <= 3) ? true : false,
             function: () async {
-              if (schoolController.addressController.text.length <= 3 || schoolController.mapAddressController.text.length <= 3) {
+              if (addressController.text.length <= 3 || mapAddressController.text.length <= 3) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',

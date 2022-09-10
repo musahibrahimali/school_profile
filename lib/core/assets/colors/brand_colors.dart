@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class BrandColors {
   static get colorDarkBlue => const Color(0xFF2B1A64);
-  static get colorDarkTheme => const Color(0xFF121212);
+  static get colorDarkTheme => const Color(0xFF202124);
   static get colorDarkThemeLight => const Color(0xFF202124);
   static get colorLightBlue => const Color(0xFF1c3aa9);
   static get colorLightGreen => const Color(0xFF21ba45);

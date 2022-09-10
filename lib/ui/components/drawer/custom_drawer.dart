@@ -1,3 +1,4 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -58,39 +59,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 CustomListTile(
                   onTap: () {
                     Navigator.pop(context);
-                    pageController.animateToPage(
-                      1,
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.easeInOutCubic,
-                    );
+                    Navigator.pushNamed(context, ReviewsPage.id);
                   },
                   isCollapsed: _isCollapsed,
-                  icon: LineAwesomeIcons.bar_chart,
-                  title: 'Schools',
-                  infoCount: 0,
-                ),
-                CustomListTile(
-                  onTap: () {
-                    Navigator.pop(context);
-                    pageController.animateToPage(
-                      2,
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.easeInOutCubic,
-                    );
-                  },
-                  isCollapsed: _isCollapsed,
-                  icon: LineAwesomeIcons.bell,
+                  icon: LineAwesomeIcons.rev_io,
                   title: 'Reviews',
-                  infoCount: 0,
-                ),
-                CustomListTile(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, BlogsPage.id);
-                  },
-                  isCollapsed: _isCollapsed,
-                  icon: LineAwesomeIcons.blog,
-                  title: 'Blog',
                   infoCount: 0,
                 ),
                 CustomListTile(
@@ -106,17 +79,25 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 CustomListTile(
                   onTap: () {
                     Navigator.pop(context);
-                    pageController.animateToPage(
-                      3,
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.easeInOutCubic,
-                    );
+                    Navigator.pushNamed(context, CreditsPage.id);
                   },
                   isCollapsed: _isCollapsed,
-                  icon: LineAwesomeIcons.user_shield,
-                  title: 'Profile',
+                  icon: LineAwesomeIcons.award,
+                  title: 'Credits',
                   infoCount: 0,
                 ),
+                userController.isUserLoggedIn
+                    ? Container()
+                    : CustomListTile(
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, AdminAuthScreen.id);
+                        },
+                        isCollapsed: _isCollapsed,
+                        icon: LineAwesomeIcons.user_cog,
+                        title: 'Admin Login',
+                        infoCount: 0,
+                      ),
                 const SizedBox(height: 20.0),
                 BrandDivider(color: BrandColors.kLightGray),
                 const SizedBox(height: 20.0),
@@ -139,15 +120,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 if (userController.isUserLoggedIn || userController.currentUserInfo.isAdmin == true)
                   Column(
                     children: <Widget>[
-                      CustomListTile(
-                        isCollapsed: _isCollapsed,
-                        icon: LineAwesomeIcons.bar_chart,
-                        title: 'Admin Schools',
-                        infoCount: 0,
-                        onTap: () {
-                          Navigator.pushNamed(context, AdminSchoolsScreen.id);
-                        },
-                      ),
+                      Builder(builder: (context) {
+                        return CustomListTile(
+                          isCollapsed: _isCollapsed,
+                          icon: LineAwesomeIcons.bar_chart,
+                          title: 'Admin Schools',
+                          infoCount: 0,
+                          onTap: () {
+                            // change the theme to light
+                            ThemeSwitcher.of(context).changeTheme(
+                              theme: BrandThemes.lightTheme(context),
+                            );
+                            themeController.toggleTheme();
+                            Navigator.pushNamed(context, AdminSchoolsScreen.id);
+                          },
+                        );
+                      }),
                       BrandDivider(color: BrandColors.kLightGray),
                     ],
                   ),

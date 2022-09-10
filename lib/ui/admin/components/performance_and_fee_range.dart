@@ -109,7 +109,7 @@ class _PerformanceAndFeeRangeState extends State<PerformanceAndFeeRange> {
                         },
                         maxLines: 2,
                         label: "Current Performance",
-                        controller: schoolController.performanceController,
+                        controller: performanceController,
                         keyboardType: TextInputType.multiline,
                         error: false,
                         errorMessage: "Invalid input",
@@ -124,7 +124,7 @@ class _PerformanceAndFeeRangeState extends State<PerformanceAndFeeRange> {
                         },
                         label: "Fee range",
                         maxLines: 2,
-                        controller: schoolController.feeRangeController,
+                        controller: feeRangeController,
                         keyboardType: TextInputType.multiline,
                         error: false,
                         errorMessage: "Invalid input",
@@ -139,9 +139,9 @@ class _PerformanceAndFeeRangeState extends State<PerformanceAndFeeRange> {
 
           BrandBottomNav(
             index: 10,
-            isButtonDisabled: (schoolController.feeRangeController.text.length < 3 || schoolController.performanceController.text.length < 3) ? true : false,
+            isButtonDisabled: (feeRangeController.text.length < 3 || performanceController.text.length < 3) ? true : false,
             function: () async {
-              if (schoolController.feeRangeController.text.length < 3 || schoolController.performanceController.text.length < 3) {
+              if (feeRangeController.text.length < 3 || performanceController.text.length < 3) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',

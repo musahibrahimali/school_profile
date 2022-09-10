@@ -56,6 +56,10 @@ class _MyAppState extends State<MyApp> {
         HelperMethods.getUserInfo();
       }
       HelperMethods.getAllSchools();
+
+      // ask user permission to access location and gallery if not already granted with permission handler
+      HelperMethods.askPermissions(index: 0);
+      HelperMethods.setupPositionLocator(context: context);
     });
     super.initState();
   }
@@ -95,6 +99,7 @@ class _MyAppState extends State<MyApp> {
                     BlogsPage.id: (context) => const BlogsPage(),
                     AuthPage.id: (context) => const AuthPage(),
                     SettingsPage.id: (context) => const SettingsPage(),
+                    CreditsPage.id: (context) => const CreditsPage(),
                   },
                 );
               },

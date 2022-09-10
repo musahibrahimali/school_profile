@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -44,3 +45,4 @@ const kDefaultOutlineInputBorder = OutlineInputBorder(
 
 // home screen page controller
 late PageController pageController;
+late Position currentPosition;

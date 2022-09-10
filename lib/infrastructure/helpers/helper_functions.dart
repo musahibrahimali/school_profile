@@ -3,8 +3,20 @@ import 'dart:math';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:school_profile/index.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HelperFunctions {
+  /*
+  * ##############################################
+  * ############## LAUNCH ULR ####################
+  * ##############################################
+  * */
+  static void iLaunchUrl(String url) async {
+    // convert the url to a Uri
+    final uri = Uri.parse(url);
+    await launchUrl(uri);
+  }
+
   // get the current year
   static int getYear() {
     DateTime now = DateTime.now();

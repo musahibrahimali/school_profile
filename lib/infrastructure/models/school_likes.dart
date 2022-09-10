@@ -17,6 +17,12 @@ class LikesModel {
         "user_id": userId,
       };
 
+  // to string
+  @override
+  String toString() {
+    return "$schoolId $userId";
+  }
+
   // copy with
   LikesModel copyWith({
     String? schoolId,

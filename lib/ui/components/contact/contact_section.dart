@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:school_profile/index.dart';
 
@@ -7,28 +8,32 @@ class MobileContactSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // this height only for demo
-      // height: 500,
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        color: Color(0xFFE8F0F9),
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage(Assets.imagesBgImg2),
-        ),
-      ),
-      child: Column(
-        children: const [
-          SizedBox(height: kDefaultPadding * 2.5),
-          MobileSectionTitle(
-            title: "Contact Us",
-            subTitle: "For Project inquiry and information",
-            color: Color(0xFF07E24A),
+    return Obx(
+      () => Container(
+        // this height only for demo
+        // height: 500,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: themeController.isLightTheme ? const Color(0xFFE8F0F9) : BrandColors.colorDarkTheme,
+          image: const DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage(Assets.imagesBgImg2),
           ),
-          MobileContactBox(),
-          SizedBox(height: kDefaultPadding * 2.5),
-        ],
+        ),
+        child: Column(
+          children: <Widget>[
+            const SizedBox(height: kDefaultPadding * 2.5),
+            MobileSectionTitle(
+              title: "Contact Us",
+              subTitle: "For Project inquiry and information",
+              color: const Color(0xFF07E24A),
+              titleColor: themeController.isLightTheme ? BrandColors.black : BrandColors.white,
+              subTitleColor: themeController.isLightTheme ? BrandColors.black : BrandColors.white,
+            ),
+            const MobileContactBox(),
+            const SizedBox(height: kDefaultPadding * 2.5),
+          ],
+        ),
       ),
     );
   }
@@ -41,51 +46,53 @@ class MobileContactBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: kDefaultPadding * 2),
-      padding: const EdgeInsets.all(kDefaultPadding * 1),
-      decoration: BoxDecoration(
-        color: BrandColors.colorBackground,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0),
-        ),
-      ),
-      child: Column(
-        children: [
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                MobileSocialCard(
-                  color: const Color(0xFFD9FFFC),
-                  iconSrc: Assets.imagesSkype,
-                  name: 'miastudios Inc',
-                  press: () {},
-                ),
-                const SizedBox(width: 15.0),
-                MobileSocialCard(
-                  color: const Color(0xFFE4FFC7),
-                  iconSrc: Assets.imagesWhatsapp,
-                  name: 'miastudios Inc',
-                  press: () {},
-                ),
-                const SizedBox(width: 15.0),
-                MobileSocialCard(
-                  color: const Color(0xFFE8F0F9),
-                  iconSrc: Assets.imagesMessanger,
-                  name: 'miastudios Inc',
-                  press: () {},
-                ),
-              ],
-            ),
+    return Obx(
+      () => Container(
+        margin: const EdgeInsets.only(top: kDefaultPadding * 2),
+        padding: const EdgeInsets.all(kDefaultPadding * 1),
+        decoration: BoxDecoration(
+          color: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20.0),
+            topRight: Radius.circular(20.0),
           ),
-          const SizedBox(height: kDefaultPadding * 2),
-          const MobileContactForm(),
-          const SizedBox(height: kDefaultPadding * 2),
-        ],
+        ),
+        child: Column(
+          children: [
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  MobileSocialCard(
+                    color: themeController.isLightTheme ? const Color(0xFFD9FFFC) : BrandColors.colorDarkTheme,
+                    iconSrc: Assets.imagesSkype,
+                    name: 'miastudios Inc',
+                    press: () {},
+                  ),
+                  const SizedBox(width: 15.0),
+                  MobileSocialCard(
+                    color: themeController.isLightTheme ? const Color(0xFFE4FFC7) : BrandColors.colorDarkTheme,
+                    iconSrc: Assets.imagesWhatsapp,
+                    name: 'miastudios Inc',
+                    press: () {},
+                  ),
+                  const SizedBox(width: 15.0),
+                  MobileSocialCard(
+                    color: themeController.isLightTheme ? const Color(0xFFE8F0F9) : BrandColors.colorDarkTheme,
+                    iconSrc: Assets.imagesMessanger,
+                    name: 'miastudios Inc',
+                    press: () {},
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: kDefaultPadding * 2),
+            const MobileContactForm(),
+            const SizedBox(height: kDefaultPadding * 2),
+          ],
+        ),
       ),
     );
   }

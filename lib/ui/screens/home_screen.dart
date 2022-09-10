@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -20,22 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<Widget> pages;
   late List<BarItem> barItems;
   late Future<bool> future;
-  late Position currentPosition;
 
   Future<bool> loadPreferences() async {
     return true;
-  }
-
-  /// set up position locator
-  _setupPositionLocator() async {
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.bestForNavigation,
-    );
-    currentPosition = position;
-
-    /// confirm location
-    await HelperFunctions.findCoordinateAddress(position, context);
-    debugPrint("current location place name ${schoolController.searchSchoolController.text}");
   }
 
   @override
@@ -49,12 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // add post frame callback
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _setupPositionLocator();
       if (schoolController.schools.isEmpty) {
         // get all schools
         HelperMethods.getAllSchools();
       }
     });
+    HelperMethods.setupPositionLocator(context: context);
 
     pageController = PageController(initialPage: selectedBottomBarIndex);
     pages = [
@@ -119,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: themeController.isLightTheme ? const Color(0xff6078ff) : BrandColors.colorDarkTheme,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
+                    color: themeController.isLightTheme ? Colors.grey.withOpacity(0.5) : Colors.transparent,
                     spreadRadius: 5,
                     blurRadius: 7,
                     offset: const Offset(0, 3), // changes position of shadow
@@ -142,64 +128,72 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: TextFormField(
-                        controller: schoolController.searchSchoolController,
-                        keyboardType: TextInputType.text,
-                        textAlign: TextAlign.start,
-                        autofocus: false,
-                        onChanged: (value) async {
-                          // setState(() {
-                          //   _destinationPredictionList = [];
-                          // });
-                          // List<Prediction>? thisList = await HelperFunctions.searchPickUpPoint(value);
-                          // if (thisList!.isNotEmpty) {
-                          //   setState(() {
-                          //     _pickUpPointPredictionList = thisList;
-                          //   });
-                          // }
-                        },
-                        keyboardAppearance: themeController.isLightTheme ? Brightness.light : Brightness.dark,
-                        decoration: InputDecoration(
-                          hintText: "Search for schools",
-                          hintStyle: GoogleFonts.montserrat(
-                            color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
-                          ),
-                          filled: false,
-                          contentPadding: const EdgeInsets.only(left: 20.0, top: 8.0, bottom: 8.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                              width: 1.0,
-                              color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
-                              style: BorderStyle.solid,
+                    child: schoolController.isUsingSearch
+                        ? Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: TextFormField(
+                              controller: searchSchoolController,
+                              keyboardType: TextInputType.text,
+                              textAlign: TextAlign.start,
+                              autofocus: false,
+                              onFieldSubmitted: (value) {
+                                searchSchoolController.text = schoolController.addressPoint.placeName!;
+                                setState(() {});
+                              },
+                              onEditingComplete: () {
+                                searchSchoolController.text = schoolController.addressPoint.placeName!;
+                                setState(() {});
+                              },
+                              onChanged: (value) async {
+                                schoolController.clearFilteredSchools();
+                                schoolController.filterSchools(value);
+                              },
+                              keyboardAppearance: themeController.isLightTheme ? Brightness.light : Brightness.dark,
+                              style: GoogleFonts.montserrat(
+                                color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "Search for schools",
+                                hintStyle: GoogleFonts.montserrat(
+                                  color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
+                                ),
+                                filled: false,
+                                contentPadding: const EdgeInsets.only(left: 20.0, top: 8.0, bottom: 8.0),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    width: 1.0,
+                                    color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    width: 1.0,
+                                    color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    width: 1.0,
+                                    color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                              width: 1.0,
-                              color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
-                              style: BorderStyle.solid,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                              width: 1.0,
-                              color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
-                              style: BorderStyle.solid,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                          )
+                        : const FilterStrip(),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      schoolController.changeIsUsingSearch(!schoolController.isUsingSearch);
+                    },
                     icon: Icon(
-                      LineAwesomeIcons.search,
+                      !schoolController.isUsingSearch ? LineAwesomeIcons.search : Icons.filter_list,
                       color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorBackground,
                       size: 28.0,
                     ),
@@ -239,6 +233,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     size: 28.0,
                   ),
                 ),
+                if (index == 3 && userController.isUserLoggedIn)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const SizedBox(width: 30.0),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, SettingsPage.id);
+                          },
+                          child: Icon(
+                            LineAwesomeIcons.cog,
+                            color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
+                            size: 32.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),

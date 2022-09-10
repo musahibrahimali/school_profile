@@ -42,19 +42,15 @@ class SchoolRepo {
       builder: (Map<String, dynamic>? data, String documentId) {
         if (data != null) {
           // create an Address for the school map address
+          // debugPrint("school data from firestore: $data");
           Address? mapAddress;
-          LikesModel? mapLikes;
           if (data['mapAddress'] != null) {
             mapAddress = Address.fromMap(data['mapAddress']);
-          }
-          if (data['likes'] != null || data['likes'] != []) {
-            mapLikes = LikesModel.fromJson(data['likes']);
           }
           // create a user map and add the doc id
           Map<dynamic, dynamic> schoolMap = {
             'uid': documentId,
             'mapAddress': mapAddress,
-            'likes': mapLikes,
             ...data,
           };
           return SchoolModel.fromJson(schoolMap);
@@ -62,6 +58,28 @@ class SchoolRepo {
         return null;
       },
     );
+  }
+
+  // delete school field value
+  Future<Either<Failure, bool>> deleteSchoolFieldValue({
+    required String schoolId,
+    required String likesField,
+  }) async {
+    try {
+      // delete the field value
+      await _firebaseCaller.deleteFieldValue(
+        path: FirestorePaths.schoolsDocument(id: schoolId),
+        field: likesField,
+      );
+      return const Right(true);
+    } on FirebaseAuthException catch (e) {
+      final errorMessage = Exceptions.firebaseAuthErrorMessage(e);
+      return Left(ServerFailure(message: errorMessage));
+    } catch (e) {
+      debugPrint(e.toString());
+      final errorMessage = Exceptions.errorMessage(e);
+      return Left(ServerFailure(message: errorMessage));
+    }
   }
 
   // update school data

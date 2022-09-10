@@ -108,7 +108,7 @@ class _TeachersAndNonTeachingPopulationState extends State<TeachersAndNonTeachin
                           setState(() {});
                         },
                         label: "Current Teachers Population",
-                        controller: schoolController.teachersPopulationController,
+                        controller: teachersPopulationController,
                         keyboardType: TextInputType.number,
                         error: false,
                         errorMessage: "Invalid input",
@@ -122,7 +122,7 @@ class _TeachersAndNonTeachingPopulationState extends State<TeachersAndNonTeachin
                           setState(() {});
                         },
                         label: "Current Non-Teaching Staff Population",
-                        controller: schoolController.nonTeachingStaffPopulationController,
+                        controller: nonTeachingStaffPopulationController,
                         keyboardType: TextInputType.number,
                         error: false,
                         errorMessage: "Invalid input",
@@ -137,9 +137,9 @@ class _TeachersAndNonTeachingPopulationState extends State<TeachersAndNonTeachin
 
           BrandBottomNav(
             index: 6,
-            isButtonDisabled: (schoolController.nonTeachingStaffPopulationController.text.isEmpty || schoolController.teachersPopulationController.text.isEmpty) ? true : false,
+            isButtonDisabled: (nonTeachingStaffPopulationController.text.isEmpty || teachersPopulationController.text.isEmpty) ? true : false,
             function: () async {
-              if (schoolController.nonTeachingStaffPopulationController.text.isEmpty || schoolController.teachersPopulationController.text.isEmpty) {
+              if (nonTeachingStaffPopulationController.text.isEmpty || teachersPopulationController.text.isEmpty) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',

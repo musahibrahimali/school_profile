@@ -75,7 +75,7 @@ class UserRepo {
   // update user
   Future updateUser(UserModel userData) async {
     await _firebaseCaller.setData(
-      path: FirestorePaths.userDocument(uid!),
+      path: FirestorePaths.userDocument(userController.currentUserInfo.uid!),
       data: userData.toMap(),
       merge: true,
     );
@@ -85,7 +85,7 @@ class UserRepo {
   // change first name
   Future updateFirstName({required String name}) async {
     await _firebaseCaller.setData(
-      path: FirestorePaths.userDocument(uid!),
+      path: FirestorePaths.userDocument(userController.currentUserInfo.uid!),
       data: {"name": name},
       merge: true,
     );
@@ -95,7 +95,7 @@ class UserRepo {
   // update the search history
   Future updateSearchHistory({required String searchHistory}) async {
     await _firebaseCaller.setData(
-      path: FirestorePaths.userDocument(uid!),
+      path: FirestorePaths.userDocument(userController.currentUserInfo.uid!),
       // add the search history to the list
       data: {
         "searchHistory": FieldValue.arrayUnion([searchHistory])
@@ -111,7 +111,7 @@ class UserRepo {
   // update user favorite
   Future updateUserFavorite({required String schoolId}) async {
     await _firebaseCaller.setData(
-      path: FirestorePaths.userDocument(uid!),
+      path: FirestorePaths.userDocument(userController.currentUserInfo.uid!),
       // add the school id to the list
       data: {
         "favorites": FieldValue.arrayUnion([schoolId])
@@ -120,6 +120,7 @@ class UserRepo {
     );
     // add the school id to the existing list
     List<dynamic>? favoritesList = userModel!.favorites;
+    debugPrint("favorites list $favoritesList");
     favoritesList!.add(schoolId);
     userModel = userModel!.copyWith(favorites: favoritesList);
   }
@@ -132,7 +133,7 @@ class UserRepo {
     );
     if (picUrl != null) {
       await _firebaseCaller.setData(
-        path: FirestorePaths.userDocument(uid!),
+        path: FirestorePaths.userDocument(userController.currentUserInfo.uid!),
         data: {"profile": picUrl},
         merge: true,
       );

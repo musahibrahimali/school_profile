@@ -109,7 +109,7 @@ class _RatingsAndFacilitiesState extends State<RatingsAndFacilities> {
                         },
                         label: "Current Rating",
                         maxLines: 2,
-                        controller: schoolController.ratingController,
+                        controller: ratingController,
                         keyboardType: TextInputType.multiline,
                         error: false,
                         errorMessage: "Invalid input",
@@ -124,7 +124,7 @@ class _RatingsAndFacilitiesState extends State<RatingsAndFacilities> {
                         },
                         maxLines: 2,
                         label: "Current Facilities",
-                        controller: schoolController.facilitiesController,
+                        controller: facilitiesController,
                         keyboardType: TextInputType.multiline,
                         error: false,
                         errorMessage: "Invalid input",
@@ -139,9 +139,9 @@ class _RatingsAndFacilitiesState extends State<RatingsAndFacilities> {
 
           BrandBottomNav(
             index: 9,
-            isButtonDisabled: (schoolController.ratingController.text.length <= 1 || schoolController.facilitiesController.text.length <= 3) ? true : false,
+            isButtonDisabled: (ratingController.text.length <= 1 || facilitiesController.text.length <= 3) ? true : false,
             function: () async {
-              if (schoolController.ratingController.text.length <= 1 || schoolController.facilitiesController.text.length <= 3) {
+              if (ratingController.text.length <= 1 || facilitiesController.text.length <= 3) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',

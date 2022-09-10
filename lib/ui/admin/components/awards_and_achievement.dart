@@ -109,7 +109,7 @@ class _AwardsAndAchievementsState extends State<AwardsAndAchievements> {
                         },
                         maxLines: 5,
                         label: "Awards and Achievements (optional)",
-                        controller: schoolController.awardsController,
+                        controller: awardsController,
                         keyboardType: TextInputType.multiline,
                         error: false,
                         errorMessage: "Invalid input",
