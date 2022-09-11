@@ -52,13 +52,12 @@ class Assets {
   static const String studentsStudentEight = 'assets/core/students/student_eight.png';
   static const String studentsStudentFive = 'assets/core/students/student_five.png';
   static const String studentsStudentFour = 'assets/core/students/student_four.png';
-  static const String studentsStudentNine = 'assets/core/students/student_nine.png';
   static const String studentsStudentOne = 'assets/core/students/student_one.png';
   static const String studentsStudentSeven = 'assets/core/students/student_seven.png';
   static const String studentsStudentSix = 'assets/core/students/student_six.png';
-  static const String studentsStudentTen = 'assets/core/students/student_ten.png';
   static const String studentsStudentThree = 'assets/core/students/student_three.png';
   static const String studentsStudentTwo = 'assets/core/students/student_two.png';
+  static const String supervisorSupervisor = 'assets/supervisor/supervisor.png';
   static const String updatesNews = 'assets/updates/news.png';
   static const String updatesNews1 = 'assets/updates/news1.png';
   static const String updatesNews2 = 'assets/updates/news2.png';

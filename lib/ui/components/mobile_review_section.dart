@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:school_profile/index.dart';
 
 class MobileReviewSection extends StatelessWidget {
-  final SchoolModel? schoolModel;
+  final void Function()? onSave;
   const MobileReviewSection({
     Key? key,
-    this.schoolModel,
+    this.onSave,
   }) : super(key: key);
 
   @override
@@ -34,7 +32,7 @@ class MobileReviewSection extends StatelessWidget {
               titleColor: themeController.isLightTheme ? BrandColors.black : BrandColors.white,
               subTitleColor: themeController.isLightTheme ? BrandColors.black : BrandColors.white,
             ),
-            MobileReviewBox(schoolModel: schoolModel),
+            MobileReviewBox(onSave: onSave),
             const SizedBox(height: kDefaultPadding * 2.5),
           ],
         ),
@@ -44,10 +42,10 @@ class MobileReviewSection extends StatelessWidget {
 }
 
 class MobileReviewBox extends StatelessWidget {
-  final SchoolModel? schoolModel;
+  final void Function()? onSave;
   const MobileReviewBox({
     Key? key,
-    this.schoolModel,
+    this.onSave,
   }) : super(key: key);
 
   @override
@@ -66,7 +64,7 @@ class MobileReviewBox extends StatelessWidget {
         child: Column(
           children: <Widget>[
             const SizedBox(height: kDefaultPadding * 2),
-            MobileReviewForm(schoolModel: schoolModel),
+            MobileReviewForm(onSave: onSave),
             const SizedBox(height: kDefaultPadding * 2),
           ],
         ),
@@ -76,10 +74,10 @@ class MobileReviewBox extends StatelessWidget {
 }
 
 class MobileReviewForm extends StatelessWidget {
-  final SchoolModel? schoolModel;
+  final void Function()? onSave;
   const MobileReviewForm({
     Key? key,
-    this.schoolModel,
+    this.onSave,
   }) : super(key: key);
 
   @override
@@ -134,92 +132,7 @@ class MobileReviewForm extends StatelessWidget {
               child: DefaultButton(
                 imageSrc: Assets.imagesContactIcon,
                 text: "Save",
-                press: () async {
-                  if (userController.currentUserInfo.isAdmin == true) {
-                    // show dialog
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CustomDialog(
-                          title: "Info",
-                          description: "An admin can't leave a review on a school",
-                          buttonText: "Proceed",
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pushNamed(context, AuthPage.id);
-                          },
-                        );
-                      },
-                    );
-                    return;
-                  }
-                  if (userController.isUserLoggedIn) {
-                    showLoading(context);
-                    reviewDateController.text = DateTime.now().toString();
-                    reviewSchoolController.text = schoolModel!.id!;
-                    reviewUserIdController.text = userController.currentUserInfo.uid!;
-                    schoolController.updateReviewModelToDatabase();
-                    var response = await HelperMethods.addNewReview(reviewModel: schoolController.reviewModelForDatabase);
-                    if (response) {
-                      Navigator.pop(context);
-                      HelperMethods.getAllReviews();
-                      showCustomFlushBar(
-                        context: context,
-                        title: 'Success',
-                        borderRadius: BorderRadius.circular(50.0),
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 10.0.w,
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 1.0.w,
-                          vertical: 1.0.h,
-                        ),
-                        titleColor: themeController.isLightTheme ? BrandColors.colorPink : BrandColors.colorWhiteAccent,
-                        message: 'Review saved',
-                        messageColor: themeController.isLightTheme ? BrandColors.colorPink : BrandColors.colorWhiteAccent,
-                        icon: LineAwesomeIcons.check_circle,
-                        iconColor: themeController.isLightTheme ? BrandColors.kErrorColor : BrandColors.colorWhiteAccent,
-                        backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
-                      );
-                    } else {
-                      Navigator.pop(context);
-                      showCustomFlushBar(
-                        context: context,
-                        title: 'Error',
-                        borderRadius: BorderRadius.circular(50.0),
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 10.0.w,
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 1.0.w,
-                          vertical: 1.0.h,
-                        ),
-                        titleColor: themeController.isLightTheme ? BrandColors.colorPink : BrandColors.colorWhiteAccent,
-                        message: 'There was an error saving your review',
-                        messageColor: themeController.isLightTheme ? BrandColors.colorPink : BrandColors.colorWhiteAccent,
-                        icon: LineAwesomeIcons.exclamation_circle,
-                        iconColor: themeController.isLightTheme ? BrandColors.kErrorColor : BrandColors.colorWhiteAccent,
-                        backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
-                      );
-                    }
-                  } else {
-                    // show dialog
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CustomDialog(
-                          title: "Info",
-                          description: "Please login to leave a review",
-                          buttonText: "Proceed",
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pushNamed(context, AuthPage.id);
-                          },
-                        );
-                      },
-                    );
-                  }
-                },
+                press: onSave ?? () {},
               ),
             ),
           )

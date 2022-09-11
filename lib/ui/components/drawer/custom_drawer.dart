@@ -117,7 +117,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ),
                     ],
                   ),
-                if (userController.isUserLoggedIn || userController.currentUserInfo.isAdmin == true)
+                if (userController.isUserLoggedIn && userController.currentUserInfo.isAdmin == true)
                   Column(
                     children: <Widget>[
                       Builder(builder: (context) {

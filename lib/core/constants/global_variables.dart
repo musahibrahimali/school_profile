@@ -15,7 +15,6 @@ CameraPosition get googlePlex => const CameraPosition(
     );
 
 String get mapKey => 'AIzaSyCWG3_YJnepd_mVCfv-sAIDTkCAjkCSGqU';
-
 final kDefaultShadow = BoxShadow(
   offset: const Offset(0, 50),
   blurRadius: 50,

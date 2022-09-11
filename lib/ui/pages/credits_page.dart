@@ -165,6 +165,77 @@ class _CreditsPageState extends State<CreditsPage> {
               ),
               Expanded(child: Container()),
 
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CustomText(
+                      text: "Project Supervisor",
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w900,
+                      color: themeController.isLightTheme ? BrandColors.colorText : Colors.white,
+                    ),
+                    const SizedBox(height: 10),
+                    ListTile(
+                      leading: const CircleAvatar(
+                        radius: 25.0,
+                        backgroundImage: AssetImage(Assets.supervisorSupervisor),
+                      ),
+                      title: CustomText(
+                        text: "Dr. Daniel Opoku ",
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w900,
+                        color: themeController.isLightTheme ? BrandColors.colorText : Colors.white,
+                      ),
+                      subtitle: CustomText(
+                        text: "Lecturer, College Engineering, KNUST",
+                        fontSize: 12.0,
+                        maxLines: 3,
+                        fontWeight: FontWeight.w600,
+                        color: themeController.isLightTheme ? BrandColors.colorText : Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () {
+                        // construct url to call the phone number
+                        String url = "tel:+233553604143";
+                        HelperFunctions.iLaunchUrl(url);
+                      },
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          radius: 25.0,
+                          backgroundColor: themeController.isLightTheme ? BrandColors.colorPrimary : BrandColors.colorPrimaryDark,
+                          child: Center(
+                            child: Icon(
+                              LineAwesomeIcons.phone,
+                              color: themeController.isLightTheme ? BrandColors.white : BrandColors.white,
+                            ),
+                          ),
+                        ),
+                        title: CustomText(
+                          text: "Contact",
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w900,
+                          color: themeController.isLightTheme ? BrandColors.colorText : Colors.white,
+                        ),
+                        subtitle: CustomText(
+                          text: "+233553604143",
+                          fontSize: 16.0,
+                          maxLines: 3,
+                          fontWeight: FontWeight.w600,
+                          color: themeController.isLightTheme ? BrandColors.colorText : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Expanded(child: Container()),
+
               Container(
                 alignment: Alignment.bottomCenter,
                 child: InkWell(

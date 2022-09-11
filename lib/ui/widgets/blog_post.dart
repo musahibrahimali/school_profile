@@ -96,7 +96,7 @@ class BlogPostCard extends StatelessWidget {
                           ),
                           child: Text(
                             "Read More",
-                            style: TextStyle(
+                            style: GoogleFonts.montserrat(
                               color: themeController.isLightTheme ? BrandColors.kErrorColor : BrandColors.colorWhiteAccent,
                             ),
                           ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:open_mail_app/open_mail_app.dart';
 import 'package:school_profile/index.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -106,13 +107,58 @@ class _SettingsPageState extends State<SettingsPage> {
                       physics: const BouncingScrollPhysics(),
                       children: <Widget>[
                         ProfileListItem(
+                          onPressed: () {
+                            Navigator.pushNamed(context, PrivacyPolicyPage.id);
+                          },
                           icon: LineAwesomeIcons.user_shield,
-                          text: 'Privacy Policy',
+                          text: 'Customer care',
                           bgColor: themeController.isLightTheme ? BrandColors.white : BrandColors.kBigPink,
                           iconColor: themeController.isLightTheme ? BrandColors.black : BrandColors.white,
                           textColor: themeController.isLightTheme ? BrandColors.black : BrandColors.white,
                         ),
                         ProfileListItem(
+                          onPressed: () async {
+                            /*
+                                * #####################################################
+                                * #################### launch mail app ################
+                                * #####################################################
+                                * */
+
+                            EmailContent email = EmailContent(
+                              to: [
+                                'miastudiosinc@gmail.com',
+                                'toobudanielnabie@gmail.com',
+                                'kingsmanreedemer.8@gmail.com',
+                              ],
+                              subject: 'Hello, The School Profiler support team,',
+                              body: 'I want to enquire on...',
+                              // cc: ['user2@domain.com', 'user3@domain.com'],
+                              // bcc: ['boss@domain.com'],
+                            );
+
+                            OpenMailAppResult result = await OpenMailApp.composeNewEmailInMailApp(nativePickerTitle: 'Select email app to continue', emailContent: email);
+                            if (!result.didOpen && !result.canOpen) {
+                              showCustomFlushBar(
+                                context: context,
+                                title: "Error",
+                                messageText: "No email app installed on this device",
+                                backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
+                                messageColor: themeController.isLightTheme ? BrandColors.kErrorColor : BrandColors.colorWhiteAccent,
+                                iconColor: themeController.isLightTheme ? BrandColors.kErrorColor : BrandColors.colorWhiteAccent,
+                                titleColor: themeController.isLightTheme ? BrandColors.kErrorColor : BrandColors.colorWhiteAccent,
+                                icon: LineAwesomeIcons.times_circle,
+                                iconSize: 28.0,
+                              );
+                            } else if (!result.didOpen && result.canOpen) {
+                              showDialog(
+                                context: context,
+                                builder: (_) => MailAppPickerDialog(
+                                  mailApps: result.options,
+                                  emailContent: email,
+                                ),
+                              );
+                            }
+                          },
                           icon: LineAwesomeIcons.question_circle,
                           text: 'Help & Support',
                           bgColor: themeController.isLightTheme ? BrandColors.white : BrandColors.kBigPink,

@@ -17,6 +17,15 @@ class HelperFunctions {
     await launchUrl(uri);
   }
 
+  // get current date
+  static String getCurrentDate() {
+    var day = getDay();
+    var month = getMonth();
+    var year = getYear();
+    final String formatted = "$day-$month-$year";
+    return formatted;
+  }
+
   // get the current year
   static int getYear() {
     DateTime now = DateTime.now();

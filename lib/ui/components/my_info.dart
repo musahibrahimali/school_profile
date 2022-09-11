@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:school_profile/index.dart';
 
 class MyInfo extends StatefulWidget {
@@ -13,8 +14,7 @@ class MyInfo extends StatefulWidget {
 class _MyInfoState extends State<MyInfo> {
   double distance = 0.0;
 
-  void getDistance({required BuildContext context}) async {
-    HelperMethods.setupPositionLocator(context: context);
+  void getDistance() async {
     if (widget.school.mapAddress!.latitude != null) {
       distance = await HelperMethods.getDistance(
         fromLat: currentPosition.latitude,
@@ -27,7 +27,7 @@ class _MyInfoState extends State<MyInfo> {
 
   @override
   Widget build(BuildContext context) {
-    getDistance(context: context);
+    getDistance();
     // print distance to 2 decimal places
     final String distanceString = distance.toStringAsFixed(2);
 
@@ -72,31 +72,54 @@ class _MyInfoState extends State<MyInfo> {
             ),
           ),
           const SizedBox(width: 20.0),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                widget.school.name ?? "",
-                style: BrandStyles.whiteNameTextStyle,
-              ),
-              const SizedBox(height: 10.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset(
-                    Assets.iconsLocationPin,
-                    width: 20.0,
-                    color: themeController.isLightTheme ? BrandColors.kErrorColor : BrandColors.kBigPink,
-                  ),
-                  const SizedBox(width: 2.0),
-                  Text(
-                    "$distanceString kilometers",
-                    style: BrandStyles.whiteSubHeadingTextStyle,
-                  )
-                ],
-              ),
-            ],
+          GestureDetector(
+            onTap: () async {
+              double latitude = widget.school.mapAddress!.latitude!;
+              double longitude = widget.school.mapAddress!.longitude!;
+              MapUtils.launchCoordinates(
+                latitude: latitude,
+                longitude: longitude,
+                description: widget.school.name,
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  widget.school.name ?? "",
+                  style: BrandStyles.whiteNameTextStyle,
+                ),
+                const SizedBox(height: 10.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      Assets.iconsLocationPin,
+                      width: 20.0,
+                      color: themeController.isLightTheme ? BrandColors.kErrorColor : BrandColors.kBigPink,
+                    ),
+                    const SizedBox(width: 2.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "$distanceString KM",
+                          style: BrandStyles.whiteSubHeadingTextStyle,
+                        ),
+                        const SizedBox(width: 5.0),
+                        Icon(
+                          LineAwesomeIcons.directions,
+                          color: BrandColors.white,
+                          size: 28.0,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

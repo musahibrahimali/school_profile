@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:school_profile/index.dart';
 
 class MobileGlassContent extends StatelessWidget {
@@ -25,19 +25,20 @@ class MobileGlassContent extends StatelessWidget {
     String subtitle = item['subtitle']!;
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(0.0),
+      borderRadius: BorderRadius.circular(15.0),
       child: BackdropFilter(
         filter: ImageFilter.blur(
           sigmaX: 10.0,
           sigmaY: 10.0,
         ),
+        blendMode: BlendMode.srcOver,
         child: Obx(
           () => Container(
             padding: const EdgeInsets.symmetric(
               horizontal: kDefaultPadding * 1.5,
             ),
             constraints: BoxConstraints(
-              maxWidth: 380.0,
+              maxWidth: 400.0,
               maxHeight: size.height * 0.3,
             ),
             width: double.infinity,
@@ -51,26 +52,31 @@ class MobileGlassContent extends StatelessWidget {
                   style: GoogleFonts.dancingScript(
                     fontWeight: FontWeight.w300,
                     color: Colors.white,
-                    fontSize: BrandSizes.h5,
+                    fontSize: 2.5.h,
                   ),
                 ),
                 CustomText(
                   text: title,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
+                  fontSize: 20.0.sp,
                   height: 1.5,
+                  maxLines: 2,
                 ),
                 const SizedBox(height: kDefaultPadding / 2),
-                Text(
-                  subtitle,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.hurricane(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w100,
-                    letterSpacing: 1.0,
+                SizedBox(
+                  width: 150.0,
+                  child: Text(
+                    subtitle,
+                    textAlign: TextAlign.start,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.hurricane(
+                      color: Colors.white,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w100,
+                      letterSpacing: 1.0,
+                    ),
                   ),
                 )
               ],

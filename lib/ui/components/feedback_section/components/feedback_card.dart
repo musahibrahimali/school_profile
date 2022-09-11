@@ -11,7 +11,7 @@ class MobileFeedbackCard extends StatefulWidget {
   final int index;
 
   @override
-  _MobileFeedbackCardState createState() => _MobileFeedbackCardState();
+  State<MobileFeedbackCard> createState() => _MobileFeedbackCardState();
 }
 
 class _MobileFeedbackCardState extends State<MobileFeedbackCard> {

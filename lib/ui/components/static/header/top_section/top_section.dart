@@ -6,7 +6,7 @@ class MobileTopSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size * 0.8;
     return Container(
       alignment: Alignment.center,
       constraints: const BoxConstraints(
@@ -27,7 +27,7 @@ class MobileTopSection extends StatelessWidget {
             MobileLogoAndBlurBox(size: size),
             const Positioned(
               bottom: 0.0,
-              right: 0.0,
+              right: -60.0,
               child: MobilePersonPic(),
             ),
           ],

@@ -100,6 +100,7 @@ class _MyAppState extends State<MyApp> {
                     AuthPage.id: (context) => const AuthPage(),
                     SettingsPage.id: (context) => const SettingsPage(),
                     CreditsPage.id: (context) => const CreditsPage(),
+                    PrivacyPolicyPage.id: (context) => const PrivacyPolicyPage(),
                   },
                 );
               },

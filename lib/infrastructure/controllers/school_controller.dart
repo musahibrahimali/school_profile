@@ -103,8 +103,8 @@ class SchoolController extends GetxController {
     _filteredSchoolList.clear();
     // debugPrint("schools before: ${allSchools.length}");
     allSchools.addAll(schools);
-    // debugPrint("schools after: ${allSchools.length}");
-    filterSchools(""); // filter schools with nothing
+    // filter the schools by the location of the user
+    filterSchools(searchSchoolController.text.isNotEmpty ? searchSchoolController.text : "");
     handleSortBy(index: 0);
   }
 

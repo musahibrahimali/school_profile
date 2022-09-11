@@ -16,7 +16,10 @@ class MobileLogoAndBlurBox extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         const SizedBox(height: 10.0),
-        MobileGlassContent(size: size),
+        Container(
+          margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+          child: MobileGlassContent(size: size),
+        ),
         const SizedBox(height: 10.0),
       ],
     );

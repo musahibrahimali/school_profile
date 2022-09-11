@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,6 +24,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool _isKeyboardOpen = false;
+  List<UserModel>? users;
 
   @override
   void initState() {
@@ -535,7 +537,6 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                                               return InkWell(
                                                 onTap: () {
                                                   // open the image widget in a dialog
-                                                  // show dialog
                                                   showDialog(
                                                     context: context,
                                                     builder: (BuildContext context) {
@@ -605,13 +606,139 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                                             },
                                           ),
                                           const SizedBox(height: kDefaultPadding * 1.5),
+                                          // reviews of the school
+                                          if (widget.schoolModel.reviews != null || widget.schoolModel.reviews!.isNotEmpty)
+                                            Container(
+                                              margin: const EdgeInsets.only(bottom: 10.0),
+                                              child: CustomTextWidget(
+                                                text: "REVIEWS".toUpperCase(),
+                                                fontSize: 28.0,
+                                                fontWeight: FontWeight.w900,
+                                                color: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
+                                                maxLines: 5,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          if (widget.schoolModel.reviews == null || widget.schoolModel.reviews!.isEmpty)
+                                            Container(
+                                              margin: const EdgeInsets.only(bottom: 10.0),
+                                              child: CustomTextWidget(
+                                                text: "No Reviews Yet",
+                                                fontSize: 28.0,
+                                                fontWeight: FontWeight.w900,
+                                                color: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
+                                                maxLines: 5,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          if (widget.schoolModel.reviews != null || widget.schoolModel.reviews!.isNotEmpty)
+                                            Builder(
+                                              builder: (context) {
+                                                return ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  itemCount: widget.schoolModel.reviews!.length,
+                                                  itemBuilder: (context, index) {
+                                                    fetchData({required int index}) async {
+                                                      final response = await FirebaseFirestore.instance.collection('users').doc(widget.schoolModel.reviews![index]['userId']).get();
+                                                      // debugPrint("data $response");
+                                                      dynamic data = response.data();
+                                                      return data;
+                                                    }
+
+                                                    var data = fetchData(index: index);
+                                                    // use a future builder to get the user data
+                                                    return FutureBuilder(
+                                                      future: data,
+                                                      builder: (context, snapshot) {
+                                                        if (snapshot.hasData) {
+                                                          return Container(
+                                                            margin: const EdgeInsets.only(bottom: 15.0),
+                                                            child: SchoolReviewCard(
+                                                              user: UserModel.fromMap(snapshot.data as Map<String, dynamic>),
+                                                              review: ReviewModel.fromJson(widget.schoolModel.reviews![index]),
+                                                            ),
+                                                          );
+                                                        } else {
+                                                          return Container();
+                                                        }
+                                                      },
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
                                         ],
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              MobileReviewSection(schoolModel: widget.schoolModel),
+                              MobileReviewSection(
+                                onSave: () async {
+                                  if (userController.isUserLoggedIn == true) {
+                                    showLoading(context);
+                                    FocusScope.of(context).unfocus();
+                                    FirebaseFirestore.instance.collection(FirestorePaths.schoolsCollection).doc(widget.schoolModel.id).update(
+                                      {
+                                        'reviews': FieldValue.arrayUnion([
+                                          {
+                                            'uid': "",
+                                            'userId': userController.currentUserInfo.uid,
+                                            'schoolId': widget.schoolModel.id,
+                                            'review': reviewContentController.text,
+                                            'date': HelperFunctions.getCurrentDate(),
+                                          }
+                                        ])
+                                      },
+                                    ).whenComplete(() {
+                                      Navigator.pop(context);
+                                      FocusScope.of(context).unfocus();
+                                      reviewContentController.clear();
+                                      schoolController.clearFilteredSchools();
+                                      schoolController.schools.clear();
+                                      HelperMethods.getAllSchools();
+                                      showCustomFlushBar(
+                                        context: context,
+                                        title: 'Success',
+                                        borderRadius: BorderRadius.circular(50.0),
+                                        margin: EdgeInsets.symmetric(
+                                          horizontal: 10.0.w,
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 1.0.w,
+                                          vertical: 1.0.h,
+                                        ),
+                                        titleColor: themeController.isLightTheme ? BrandColors.colorPink : BrandColors.colorWhiteAccent,
+                                        message: 'Review saved',
+                                        messageColor: themeController.isLightTheme ? BrandColors.colorPink : BrandColors.colorWhiteAccent,
+                                        icon: LineAwesomeIcons.check_circle,
+                                        iconColor: themeController.isLightTheme ? BrandColors.kErrorColor : BrandColors.colorWhiteAccent,
+                                        backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
+                                      );
+                                      // debugPrint('Field Added');
+                                    });
+                                  } else {
+                                    // show dialog
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CustomDialog(
+                                          title: "Info",
+                                          description: "Please login to leave a review",
+                                          buttonText: "Proceed",
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            Navigator.pushNamed(context, AuthPage.id);
+                                          },
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                              ),
                               const SizedBox(height: kDefaultPadding * 2),
                             ],
                           ),

@@ -22,8 +22,6 @@ class _MobilePersonPicState extends State<MobilePersonPic> {
     Assets.studentsStudentSix,
     Assets.studentsStudentSeven,
     Assets.studentsStudentEight,
-    Assets.studentsStudentNine,
-    Assets.studentsStudentTen,
   ];
 
   /// generate a random number to select and image from the available images

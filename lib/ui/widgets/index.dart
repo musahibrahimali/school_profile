@@ -14,6 +14,7 @@ export 'detail_item.dart';
 export 'loading_indicators.dart';
 export 'my_custom_outline_button.dart';
 export 'news_list_skeleton.dart';
+export 'privacy_policy_definition_item.dart';
 export 'profile_list_item.dart';
 export 'radial_progress.dart';
 export 'round_image.dart';

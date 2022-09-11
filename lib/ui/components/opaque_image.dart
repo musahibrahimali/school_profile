@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:school_profile/index.dart';
 
 class OpaqueImage extends StatelessWidget {
@@ -45,14 +46,10 @@ class OpaqueImage extends StatelessWidget {
             },
           ),
         ),
-        // Image.asset(
-        //   imageUrl,
-        //   width: double.maxFinite,
-        //   height: double.maxFinite,
-        //   fit: BoxFit.fill,
-        // ),
-        Container(
-          color: BrandColors.colorPrimary.withOpacity(0.85),
+        Obx(
+          () => Container(
+            color: themeController.isLightTheme ? BrandColors.colorPrimary.withOpacity(0.85) : BrandColors.colorDarkTheme.withOpacity(0.85),
+          ),
         ),
       ],
     );
