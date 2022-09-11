@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:school_profile/index.dart';
 
 class MyInfo extends StatefulWidget {
@@ -86,9 +87,12 @@ class _MyInfoState extends State<MyInfo> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  widget.school.name ?? "",
-                  style: BrandStyles.whiteNameTextStyle,
+                CustomText(
+                  text: widget.school.name ?? "",
+                  maxLines: 4,
+                  color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 2.5.h,
                 ),
                 const SizedBox(height: 10.0),
                 Row(

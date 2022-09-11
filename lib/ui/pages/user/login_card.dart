@@ -187,7 +187,7 @@ class _LoginCardState extends State<LoginCard> {
                         child: Text(
                           'Register'.toUpperCase(),
                           style: TextStyle(
-                            color: BrandColors.colorGreen,
+                            color: themeController.isLightTheme ? BrandColors.colorGreen : BrandColors.colorPink,
                             fontSize: 1.6.h,
                             fontWeight: FontWeight.w900,
                           ),

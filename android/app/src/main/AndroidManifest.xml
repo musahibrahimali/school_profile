@@ -30,7 +30,7 @@
     </queries>
 
    <application
-        android:label="School Profile"
+        android:label="School Profiler"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

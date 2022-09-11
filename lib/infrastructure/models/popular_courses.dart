@@ -24,7 +24,7 @@ List<Course> popularCourses = [
   ),
   Course(
     id: 2,
-    title: "Internation",
+    title: "International",
     image: Assets.imagesDesktop,
     color: const Color(0xFFE4FFC7),
   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:school_profile/index.dart';
 
 class MobileSectionTitle extends StatelessWidget {
@@ -42,11 +43,11 @@ class MobileSectionTitle extends StatelessWidget {
             children: [
               Text(
                 subTitle,
-                maxLines: 2,
+                maxLines: 3,
                 style: TextStyle(
                   fontWeight: FontWeight.w200,
                   color: subTitleColor ?? BrandColors.kCustomTextColor,
-                  fontSize: 11.0,
+                  fontSize: 1.2.h,
                 ),
               ),
               Text(

@@ -67,7 +67,7 @@ class MobileDetailItem extends StatelessWidget {
               fontSize: detailSize ?? 18.0,
               fontWeight: detailWeight ?? FontWeight.w400,
               color: detailColor ?? BrandColors.colorText,
-              maxLines: maxLines ?? 2,
+              maxLines: maxLines ?? 4,
             ),
           ],
         ),

@@ -285,7 +285,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
 
                                     /// year of establishment
                                     MobileDetailItem(
-                                      title: "Date of Establishment",
+                                      title: "Date of Est.",
                                       detail: widget.schoolModel.yearOfEstablishment ?? "",
                                       backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
                                       titleColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
@@ -753,7 +753,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
               _isKeyboardOpen
                   ? Container()
                   : Positioned(
-                      top: screenHeight * (3 / 8) - 70 / 0.4,
+                      top: screenHeight * (3 / 8) - 70 / 0.5,
                       left: 16.0,
                       right: 16.0,
                       child: SizedBox(

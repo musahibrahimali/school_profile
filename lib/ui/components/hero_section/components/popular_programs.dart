@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:school_profile/index.dart';
 
 class MobileProgramCard extends StatefulWidget {
@@ -69,7 +70,7 @@ class _MobileProgramCardState extends State<MobileProgramCard> {
               const SizedBox(height: kDefaultPadding),
               CustomTextWidget(
                 text: popularCourses[widget.index].title,
-                fontSize: 22.0,
+                fontSize: 2.5.h,
                 color: themeController.isLightTheme ? BrandColors.colorTextDark : BrandColors.colorWhiteAccent, //
               ),
             ],

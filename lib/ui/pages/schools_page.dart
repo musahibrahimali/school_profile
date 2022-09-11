@@ -157,6 +157,30 @@ class _SchoolsPageState extends State<SchoolsPage> {
                       ),
                     ),
                   ),
+                  if (searchSchoolController.text.isNotEmpty && schoolController.filteredSchoolList.isEmpty)
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0,
+                              vertical: 15.0,
+                            ),
+                            decoration: BoxDecoration(
+                              color: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
+                            ),
+                            child: CustomText(
+                              text: "No schools available for your search",
+                              maxLines: 3,
+                              fontSize: 18.0,
+                              color: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   SizedBox(height: 2.0.h),
                 ],
               ),
