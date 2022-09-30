@@ -2,6 +2,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:school_profile/index.dart';
@@ -210,6 +211,123 @@ class _CategoryAndYearOfEstablishmentState extends State<CategoryAndYearOfEstabl
                           return null;
                         },
                         onSaved: (val) => debugPrint(val),
+                      ),
+                    ),
+                    const SizedBox(height: 30.0),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: DateTimePicker(
+                              initialValue: '',
+                              type: DateTimePickerType.time,
+                              initialTime: const TimeOfDay(hour: 8, minute: 0),
+                              decoration: InputDecoration(
+                                border: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xffEEEEEE),
+                                  ),
+                                ),
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xffEEEEEE),
+                                  ),
+                                ),
+                                enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xffEEEEEE),
+                                  ),
+                                ),
+                                labelText: "Opening Time",
+                                labelStyle: GoogleFonts.montserrat(
+                                  fontSize: 18.0,
+                                  color: BrandColors.white,
+                                ),
+                              ),
+                              style: GoogleFonts.montserrat(
+                                fontSize: 18.0,
+                                color: BrandColors.white,
+                              ),
+                              onChanged: (val) {
+                                openingTimeController.text = val;
+                                // debugPrint("opening time ${openingTimeController.text}");
+                              },
+                              validator: (val) {
+                                debugPrint(val);
+                                return null;
+                              },
+                              onSaved: (val) => debugPrint(val),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10.w),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: DateTimePicker(
+                              initialValue: '',
+                              type: DateTimePickerType.time,
+                              initialTime: const TimeOfDay(hour: 8, minute: 0),
+                              decoration: InputDecoration(
+                                border: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xffEEEEEE),
+                                  ),
+                                ),
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xffEEEEEE),
+                                  ),
+                                ),
+                                enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xffEEEEEE),
+                                  ),
+                                ),
+                                labelText: "Closing Time",
+                                labelStyle: GoogleFonts.montserrat(
+                                  fontSize: 18.0,
+                                  color: BrandColors.white,
+                                ),
+                              ),
+                              style: GoogleFonts.montserrat(
+                                fontSize: 18.0,
+                                color: BrandColors.white,
+                              ),
+                              onChanged: (val) {
+                                closingTimeController.text = val;
+                              },
+                              validator: (val) {
+                                debugPrint(val);
+                                return null;
+                              },
+                              onSaved: (val) => debugPrint(val),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 30.0),
+
+                    Obx(
+                      () => ListTile(
+                        leading: Checkbox(
+                          value: schoolController.weOperateOnSaturdays,
+                          side: BorderSide(color: BrandColors.white),
+                          activeColor: BrandColors.colorGreen,
+                          onChanged: (value) {
+                            schoolController.updateWeOperateOnSaturdays(value!);
+                          },
+                        ),
+                        title: Text(
+                          "We operate on Saturdays",
+                          style: GoogleFonts.montserrat(
+                            fontSize: 18.0,
+                            color: BrandColors.white,
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(height: 4.h),

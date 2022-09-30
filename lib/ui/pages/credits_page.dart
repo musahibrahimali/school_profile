@@ -153,7 +153,7 @@ class _CreditsPageState extends State<CreditsPage> {
                 Padding(
                   padding: const EdgeInsets.all(15),
                   child: AutoSizeText(
-                    "The School Profiler is an app made with Flutter framework to profile schools. It shows the various information and details about schools in Ghana. As it is an open source app feel free to contribute and star in GitHub.",
+                    "The School Profiler is an app made with the Flutter framework to profile schools. It shows various information and details about schools in Ghana. As it is an open-source app feel free to contribute and star on GitHub. More features are underway.",
                     style: GoogleFonts.montserrat(
                       fontSize: 16,
                       letterSpacing: 0.4,
@@ -166,7 +166,7 @@ class _CreditsPageState extends State<CreditsPage> {
                   ),
                 ),
 
-                SizedBox(height: .0.h),
+                SizedBox(height: 2.0.h),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -176,11 +176,13 @@ class _CreditsPageState extends State<CreditsPage> {
                     children: <Widget>[
                       CustomText(
                         text: "Project Supervisor",
-                        fontSize: 18.0,
+                        fontSize: 2.5.h,
                         fontWeight: FontWeight.w900,
-                        color: themeController.isLightTheme ? BrandColors.colorText : Colors.white,
                       ),
-                      const SizedBox(height: 10),
+                      const Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: BrandDivider(height: 2.0),
+                      ),
                       ListTile(
                         leading: const CircleAvatar(
                           radius: 25.0,
@@ -232,6 +234,50 @@ class _CreditsPageState extends State<CreditsPage> {
                             color: themeController.isLightTheme ? BrandColors.colorText : Colors.white,
                           ),
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 4.0.h),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      CustomText(
+                        text: "Group Members",
+                        fontSize: 2.5.h,
+                        fontWeight: FontWeight.w900,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: BrandDivider(height: 2.0),
+                      ),
+                      const AboutMemberCard(
+                        name: "Musah Ibrahim Ali",
+                        about:
+                            "Musah Baba Ali Ibrahim is a final year student reading Bachelor of Science in Electrical and Electronic Engineering. He has undertaken industrial training at Contracta Construction Ltd where he gained skills in electrical services and implementation. He is currently taking advanced courses in project management and website development to better serve him in his career as an entrepreneur. He also gained practical experience in Microsoft word, excel and power points during his time as a virtual intern during the Covid pandemic lockdown. He is an open-minded individual who is ever ready to learn. He is intensely motivated with the drive to better himself continually.",
+                        color: Color(0xFFD9FFFC),
+                        image: Assets.groupMusah,
+                      ),
+                      const SizedBox(height: 20),
+                      const AboutMemberCard(
+                        name: "Toobu Daniel Nabie",
+                        about:
+                            "Toobu Daniel Nabie is a final year student at the Kwame Nkrumah University of Science and Technology offering Electrical/Electronic Engineering. I had the pleasure to work hand in hand with a cryptocurrency company called CG for four months. My four months experience helped me to understand the trade and also opened my senses to take calculated risk.",
+                        color: Color(0xFFFFF3DD),
+                        image: Assets.groupNabbie,
+                      ),
+                      const SizedBox(height: 20),
+                      const AboutMemberCard(
+                        name: "Owusu Sylvester",
+                        about:
+                            "Owusu Sylvester is a Final Year Electrical and Electronics Engineering at the Kwame Nkrumah University of Science and Technology. He is very much interested in Python Programming and Automation of repetitive tasks. He is a tech enthusiast, built and managed a couple of websites and hence very suited for managing all the online and website affairs of the business.",
+                        color: Color(0xFFFFE0E0),
+                        image: Assets.groupSly,
                       ),
                     ],
                   ),

@@ -1,4 +1,5 @@
 export 'about/index.dart';
+export 'about_member_card.dart';
 export 'contact/index.dart';
 export 'drawer/index.dart';
 export 'feedback_section/index.dart';
@@ -8,6 +9,7 @@ export 'hero_section/index.dart';
 export 'institution_section/index.dart';
 export 'mobile_review_section.dart';
 export 'my_info.dart';
+export 'no_schools.dart';
 export 'opaque_image.dart';
 export 'profile_info_big_card.dart';
 export 'profile_info_card.dart';

@@ -16,10 +16,7 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, Tar
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -27,10 +24,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -48,6 +42,15 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAizPr7ExDkWCPy6vUz6SSPTJbRdZsE5Ls',
+    appId: '1:310631576663:web:f76e0d14dec57bb8d61f12',
+    messagingSenderId: '310631576663',
+    projectId: 'gh-school-profilling',
+    authDomain: 'gh-school-profilling.firebaseapp.com',
+    storageBucket: 'gh-school-profilling.appspot.com',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDU3xtR58Qu6IFNVlDU2eN9HlJUTBZKTrk',
     appId: '1:310631576663:android:a2c65b92ba528d74d61f12',
@@ -57,6 +60,16 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyA_LFQHKg0ibTKcSCVlwqutkOwMhyDWVSw',
+    appId: '1:310631576663:ios:bfe5d3c14def66a5d61f12',
+    messagingSenderId: '310631576663',
+    projectId: 'gh-school-profilling',
+    storageBucket: 'gh-school-profilling.appspot.com',
+    iosClientId: '310631576663-737gpepgfqeu4n1d7gmh9qluo00aksti.apps.googleusercontent.com',
+    iosBundleId: 'com.miastudiosinc.schoolProfile',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyA_LFQHKg0ibTKcSCVlwqutkOwMhyDWVSw',
     appId: '1:310631576663:ios:bfe5d3c14def66a5d61f12',
     messagingSenderId: '310631576663',

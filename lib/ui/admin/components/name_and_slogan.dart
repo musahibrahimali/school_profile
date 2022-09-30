@@ -1,8 +1,8 @@
-import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:school_profile/index.dart';
 
 class NameAndSlogan extends StatefulWidget {
@@ -18,6 +18,16 @@ class _NameAndSloganState extends State<NameAndSlogan> {
 
   // is keyboard open
   bool _isKeyboardOpen = false;
+  static final List<SchoolLevel> _schoolLevels = <SchoolLevel>[
+    SchoolLevel(id: 'Day Care', name: "Day Care"),
+    SchoolLevel(id: 'Pre School', name: "Pre School"),
+    SchoolLevel(id: 'Creche/Kindergarten', name: "Creche/Kindergarten"),
+    SchoolLevel(id: 'Primary', name: "Primary"),
+    SchoolLevel(id: 'Junior High School', name: "Junior High School"),
+  ];
+
+  final _items = _schoolLevels.map((item) => MultiSelectItem<SchoolLevel>(item, item.name)).toList();
+  List<dynamic> _selectedLevels = [];
 
   @override
   Widget build(BuildContext context) {
@@ -126,59 +136,74 @@ class _NameAndSloganState extends State<NameAndSlogan> {
                       ),
                     ),
                     const SizedBox(height: 30.0),
-                    // select category
-                    Padding(
+                    Container(
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: DropDownTextField(
-                        clearOption: false,
-                        enableSearch: false,
-                        initialValue: "Select School Level",
-                        textStyle: GoogleFonts.montserrat(
-                          fontSize: 18.0,
-                          color: BrandColors.white,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border.all(
+                          color: const Color(0xffEEEEEE),
+                          width: 2,
                         ),
-                        textFieldDecoration: const InputDecoration(
-                          hintText: "Select School Level",
-                          hintStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18.0,
-                          ),
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xffEEEEEE),
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          MultiSelectBottomSheetField(
+                            initialChildSize: 0.4,
+                            listType: MultiSelectListType.CHIP,
+                            backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
+                            searchable: true,
+                            buttonText: Text(
+                              "School Levels",
+                              style: GoogleFonts.montserrat(
+                                color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
+                              ),
+                            ),
+                            buttonIcon: Icon(
+                              Icons.arrow_drop_down,
+                              color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
+                            ),
+                            title: Text(
+                              "School Levels",
+                              style: GoogleFonts.montserrat(),
+                            ),
+                            selectedColor: BrandColors.colorDarkGreen,
+                            selectedItemsTextStyle: GoogleFonts.montserrat(
+                              color: BrandColors.colorWhiteAccent,
+                            ),
+                            unselectedColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
+                            separateSelectedItems: true,
+                            onSelectionChanged: (values) {
+                              setState(() {
+                                _selectedLevels = values;
+                              });
+                            },
+                            items: _items,
+                            onConfirm: (values) {
+                              setState(() {
+                                _selectedLevels = values;
+                              });
+                            },
+                            chipDisplay: MultiSelectChipDisplay(
+                              onTap: (value) {
+                                setState(() {
+                                  _selectedLevels.remove(value);
+                                });
+                              },
                             ),
                           ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xffEEEEEE),
-                            ),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xffEEEEEE),
-                            ),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null) {
-                            return "Required field";
-                          } else {
-                            return null;
-                          }
-                        },
-                        dropDownItemCount: 5,
-                        dropDownList: const <DropDownValueModel>[
-                          DropDownValueModel(name: 'Day Care', value: "Day Care"),
-                          DropDownValueModel(name: 'Pre School', value: "Pre School"),
-                          DropDownValueModel(name: 'Creche/Kindergarten', value: "Creche/Kindergarten"),
-                          DropDownValueModel(name: 'Primary', value: "Primary"),
-                          DropDownValueModel(name: 'Junior High School', value: "Junior High School"),
+                          _selectedLevels.isEmpty
+                              ? Container(
+                                  padding: const EdgeInsets.all(10),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "None selected",
+                                    style: GoogleFonts.montserrat(
+                                      color: themeController.isLightTheme ? BrandColors.colorWhiteAccent : BrandColors.colorWhiteAccent,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                         ],
-                        onChanged: (val) {
-                          levelController.text = val.value.toString();
-                          debugPrint("Selected value: ${levelController.text}");
-                          FocusScope.of(context).unfocus();
-                        },
                       ),
                     ),
                     SizedBox(height: 4.h),
@@ -190,9 +215,9 @@ class _NameAndSloganState extends State<NameAndSlogan> {
 
           BrandBottomNav(
             index: 0,
-            isButtonDisabled: (nameController.text.length <= 5 || sloganController.text.length <= 5 || levelController.text.length <= 3) ? true : false,
+            isButtonDisabled: (nameController.text.length <= 5 || sloganController.text.length <= 5 || _selectedLevels.isEmpty) ? true : false,
             function: () async {
-              if (nameController.text.length <= 5 || sloganController.text.length <= 5 || levelController.text.length <= 3) {
+              if (nameController.text.length <= 5 || sloganController.text.length <= 5 || _selectedLevels.isEmpty) {
                 showCustomFlushBar(
                   context: context,
                   title: 'Error',
@@ -251,6 +276,7 @@ class _NameAndSloganState extends State<NameAndSlogan> {
               }
 
               if (userController.isUserLoggedIn && userController.currentUserInfo.isAdmin == true) {
+                schoolController.updateSchoolLevels(_selectedLevels.map((e) => e.name).toList());
                 Navigator.push(context, MaterialPageRoute(builder: (_) => const CategoryAndYearOfEstablishment()));
               } else {
                 return;

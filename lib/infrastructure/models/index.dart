@@ -7,6 +7,7 @@ export 'default_string.dart';
 export 'popular_courses.dart';
 export 'prediction.dart';
 export 'review_model.dart';
+export 'school_level.dart';
 export 'school_likes.dart';
 export 'school_model.dart';
 export 'user_feedback.dart';

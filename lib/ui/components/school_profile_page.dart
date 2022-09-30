@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:school_profile/index.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SchoolProfilePage extends StatefulWidget {
   static const String id = 'school_profile_page';
@@ -25,6 +26,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
 
   bool _isKeyboardOpen = false;
   List<UserModel>? users;
+  double distance = 0.0;
 
   @override
   void initState() {
@@ -47,6 +49,8 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
         _isKeyboardOpen = false;
       });
     }
+
+    // debugPrint("operating hours ${widget.schoolModel.toJson()}");
 
     return Obx(
       () => Scaffold(
@@ -83,6 +87,27 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
             color: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
           ),
           centerTitle: true,
+          // actions
+          actions: [
+            // search button
+            InkWell(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Icon(
+                  LineAwesomeIcons.alternate_share,
+                  color: themeController.isLightTheme ? BrandColors.black : BrandColors.white,
+                  size: 28.0,
+                ),
+              ),
+              onTap: () {
+                Share.share('check out this amazing app for school profile https://play.google.com/store/apps/details?id=com.school_profile');
+              },
+            ),
+          ],
         ),
         body: SafeArea(
           child: Stack(
@@ -92,7 +117,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                   _isKeyboardOpen
                       ? Container()
                       : Expanded(
-                          flex: 2,
+                          flex: 3,
                           child: Stack(
                             children: <Widget>[
                               OpaqueImage(
@@ -229,7 +254,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                             children: <Widget>[
                               Container(
                                 width: double.infinity,
-                                height: MediaQuery.of(context).size.height * 0.20,
+                                // height: MediaQuery.of(context).size.height * 0.20,
                                 decoration: BoxDecoration(
                                   color: themeController.isLightTheme ? const Color(0xFFF7E8FF).withOpacity(0.3) : BrandColors.colorDarkTheme.withOpacity(0.3),
                                   image: const DecorationImage(
@@ -239,28 +264,32 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                                     ),
                                   ),
                                 ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    CustomTextWidget(
-                                      text: widget.schoolModel.name!.toUpperCase(),
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 36.0,
-                                      maxLines: 5,
-                                      color: themeController.isLightTheme ? BrandColors.colorPrimaryDark : BrandColors.colorWhiteAccent,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: kDefaultPadding / 2),
-                                    CustomTextWidget(
-                                      text: widget.schoolModel.slogan!.toUpperCase(),
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 28.0,
-                                      maxLines: 2,
-                                      color: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
+                                child: ClipRRect(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      const SizedBox(height: kDefaultPadding / 4),
+                                      CustomTextWidget(
+                                        text: widget.schoolModel.name!.toUpperCase(),
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 32.0,
+                                        maxLines: 10,
+                                        color: themeController.isLightTheme ? BrandColors.colorPrimaryDark : BrandColors.colorWhiteAccent,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(height: kDefaultPadding / 2),
+                                      CustomTextWidget(
+                                        text: widget.schoolModel.slogan!.toUpperCase(),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 24.0,
+                                        maxLines: 15,
+                                        color: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(height: kDefaultPadding / 4),
+                                    ],
+                                  ),
                                 ),
                               ),
                               Padding(
@@ -273,14 +302,13 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                                     MobileDetailItem(
                                       title: "Name",
                                       detail: widget.schoolModel.name ?? "",
+                                      maxLines: 10,
                                       backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
                                       titleColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
                                       detailColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
                                     ),
                                     const SizedBox(height: kDefaultPadding * 0.5),
-                                    BrandDivider(
-                                      color: BrandColors.kGrey,
-                                    ),
+                                    BrandDivider(color: BrandColors.kGrey),
                                     const SizedBox(height: kDefaultPadding * 0.5),
 
                                     /// year of establishment
@@ -299,7 +327,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
 
                                     /// category
                                     MobileDetailItem(
-                                      title: "School Category",
+                                      title: "Category",
                                       detail: widget.schoolModel.category ?? "",
                                       backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
                                       titleColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
@@ -313,8 +341,40 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
 
                                     /// level
                                     MobileDetailItem(
-                                      title: "School Level",
-                                      detail: widget.schoolModel.level ?? "",
+                                      title: "Level",
+                                      // detail: widget.schoolModel.level![0] ?? "",
+                                      detailWidget: widget.schoolModel.level!.length > 1
+                                          ? SizedBox(
+                                              width: 100,
+                                              child: ListView.builder(
+                                                shrinkWrap: true,
+                                                physics: const NeverScrollableScrollPhysics(),
+                                                itemCount: widget.schoolModel.level!.length,
+                                                itemBuilder: (context, index) {
+                                                  return Row(
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        LineAwesomeIcons.dot_circle,
+                                                        size: 12.0,
+                                                        color: themeController.isLightTheme ? BrandColors.colorPrimaryDark : BrandColors.colorWhiteAccent,
+                                                      ),
+                                                      Flexible(
+                                                        child: ClipRRect(
+                                                          child: CustomTextWidget(
+                                                            text: widget.schoolModel.level![index],
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.w500,
+                                                            maxLines: 2,
+                                                            color: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                          : null,
                                       backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
                                       titleColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
                                       detailColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
@@ -342,15 +402,13 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                                     /// district of school
                                     MobileDetailItem(
                                       title: "District",
-                                      detail: widget.schoolModel.district ?? "",
+                                      detail: widget.schoolModel.district!.isNotEmpty ? widget.schoolModel.district : "Not Available",
                                       backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
                                       titleColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
                                       detailColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
                                     ),
                                     const SizedBox(height: kDefaultPadding * 0.5),
-                                    BrandDivider(
-                                      color: BrandColors.kGrey,
-                                    ),
+                                    BrandDivider(color: BrandColors.kGrey),
                                     const SizedBox(height: kDefaultPadding * 0.5),
 
                                     /// address of school
@@ -360,6 +418,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                                       backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
                                       titleColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
                                       detailColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
+                                      maxLines: 30,
                                     ),
                                     const SizedBox(height: kDefaultPadding * 0.5),
                                     BrandDivider(
@@ -374,6 +433,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                                       backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
                                       titleColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
                                       detailColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
+                                      maxLines: 30,
                                     ),
                                     const SizedBox(height: kDefaultPadding * 0.5),
                                     BrandDivider(
@@ -388,6 +448,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                                       backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
                                       titleColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
                                       detailColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
+                                      maxLines: 30,
                                     ),
                                     const SizedBox(height: kDefaultPadding * 0.5),
                                     BrandDivider(
@@ -398,7 +459,22 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                                     /// region of school
                                     MobileDetailItem(
                                       title: "Fee Range",
-                                      detail: "(GHS) ${widget.schoolModel.feeRange ?? ""}",
+                                      detail: "GHS ${widget.schoolModel.feeRange ?? ""}",
+                                      backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
+                                      titleColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
+                                      detailColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
+                                    ),
+                                    const SizedBox(height: kDefaultPadding * 0.5),
+                                    BrandDivider(
+                                      color: BrandColors.kGrey,
+                                    ),
+                                    const SizedBox(height: kDefaultPadding * 0.5),
+
+                                    /// operating hours
+                                    MobileDetailItem(
+                                      title: "Open Hours",
+                                      maxLines: 8,
+                                      detail: widget.schoolModel.operatingHours != null ? "${widget.schoolModel.operatingHours}" : "08:00AM - 05:00PM, MON-FRI",
                                       backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
                                       titleColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
                                       detailColor: themeController.isLightTheme ? BrandColors.colorText : BrandColors.colorWhiteAccent,
@@ -753,7 +829,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
               _isKeyboardOpen
                   ? Container()
                   : Positioned(
-                      top: screenHeight * (3 / 8) - 70 / 0.5,
+                      top: screenHeight * (3 / 8) - 50 / 0.5,
                       left: 16.0,
                       right: 16.0,
                       child: SizedBox(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:responsive_sizer/responsive_sizer.dart' as sizer;
 import 'package:school_profile/index.dart';
 
@@ -66,48 +67,77 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      builder: (BuildContext context, Widget? child) {
-        return sizer.ResponsiveSizer(
-          builder: (BuildContext context, Orientation orientation, sizer.ScreenType screenType) {
-            return ThemeProvider(
-              initTheme: themeController.isLightTheme ? BrandThemes.lightTheme(context) : BrandThemes.darkTheme(context),
-              builder: (BuildContext context, ThemeData theme) {
-                return GetMaterialApp(
-                  title: 'School Profiler',
-                  debugShowCheckedModeBanner: false,
-                  color: BrandColors.colorBackground,
-                  theme: BrandThemes.lightTheme(context),
-                  darkTheme: BrandThemes.darkTheme(context),
-                  themeMode: themeController.isLightTheme ? ThemeMode.light : ThemeMode.dark,
-                  home: const HomeScreen(),
-                  routes: {
-                    /// [screens]
-                    HomeScreen.id: (context) => const HomeScreen(),
-
-                    /// [admin]
-                    AdminAuthScreen.id: (context) => const AdminAuthScreen(),
-                    RegisterSchoolScreen.id: (context) => const RegisterSchoolScreen(),
-                    AdminSchoolsScreen.id: (context) => const AdminSchoolsScreen(),
-
-                    /// [pages]
-                    HomePage.id: (context) => const HomePage(),
-                    AboutPage.id: (context) => const AboutPage(),
-                    SchoolsPage.id: (context) => const SchoolsPage(),
-                    ReviewsPage.id: (context) => const ReviewsPage(),
-                    UserProfilePage.id: (context) => const UserProfilePage(),
-                    BlogsPage.id: (context) => const BlogsPage(),
-                    AuthPage.id: (context) => const AuthPage(),
-                    SettingsPage.id: (context) => const SettingsPage(),
-                    CreditsPage.id: (context) => const CreditsPage(),
-                    PrivacyPolicyPage.id: (context) => const PrivacyPolicyPage(),
-                  },
-                );
-              },
-            );
-          },
-        );
+    return RefreshConfiguration(
+      footerTriggerDistance: 15,
+      headerTriggerDistance: 60,
+      dragSpeedRatio: 0.91,
+      headerBuilder: () => const MaterialClassicHeader(),
+      footerBuilder: () => const ClassicFooter(),
+      enableLoadingWhenNoData: false,
+      enableRefreshVibrate: false,
+      enableLoadMoreVibrate: false,
+      shouldFooterFollowWhenNotFull: (state) {
+        // If you want load more with noMoreData state ,may be you should return false
+        return false;
       },
+      child: ScreenUtilInit(
+        builder: (BuildContext context, Widget? child) {
+          return sizer.ResponsiveSizer(
+            builder: (BuildContext context, Orientation orientation, sizer.ScreenType screenType) {
+              return ThemeProvider(
+                initTheme: themeController.isLightTheme ? BrandThemes.lightTheme(context) : BrandThemes.darkTheme(context),
+                builder: (BuildContext context, ThemeData theme) {
+                  return GetMaterialApp(
+                    builder: (BuildContext context, Widget? child) {
+                      return ScrollConfiguration(
+                        behavior: const ScrollBehavior(),
+                        child: child!,
+                      );
+                    },
+                    title: 'School Profiler',
+                    debugShowCheckedModeBanner: false,
+                    color: BrandColors.colorBackground,
+                    theme: BrandThemes.lightTheme(context),
+                    darkTheme: BrandThemes.darkTheme(context),
+                    themeMode: themeController.isLightTheme ? ThemeMode.light : ThemeMode.dark,
+                    localizationsDelegates: const [
+                      RefreshLocalizations.delegate,
+                    ],
+                    supportedLocales: const [
+                      Locale('en'),
+                      Locale('fr'),
+                      Locale('es'),
+                    ],
+                    locale: const Locale('en'),
+                    home: const HomeScreen(),
+                    routes: {
+                      /// [screens]
+                      HomeScreen.id: (context) => const HomeScreen(),
+
+                      /// [admin]
+                      AdminAuthScreen.id: (context) => const AdminAuthScreen(),
+                      RegisterSchoolScreen.id: (context) => const RegisterSchoolScreen(),
+                      AdminSchoolsScreen.id: (context) => const AdminSchoolsScreen(),
+
+                      /// [pages]
+                      HomePage.id: (context) => const HomePage(),
+                      AboutPage.id: (context) => const AboutPage(),
+                      SchoolsPage.id: (context) => const SchoolsPage(),
+                      ReviewsPage.id: (context) => const ReviewsPage(),
+                      UserProfilePage.id: (context) => const UserProfilePage(),
+                      BlogsPage.id: (context) => const BlogsPage(),
+                      AuthPage.id: (context) => const AuthPage(),
+                      SettingsPage.id: (context) => const SettingsPage(),
+                      CreditsPage.id: (context) => const CreditsPage(),
+                      PrivacyPolicyPage.id: (context) => const PrivacyPolicyPage(),
+                    },
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

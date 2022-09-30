@@ -62,6 +62,10 @@ class HelperMethods {
     if (await Permission.phone.isDenied) {
       await Permission.phone.request();
     }
+    // ask for storage permission
+    if (await Permission.storage.isDenied) {
+      await Permission.storage.request();
+    }
   }
 
   static Future<void> _askLocationPermission() async {
@@ -73,6 +77,13 @@ class HelperMethods {
   static Future<void> _askMediaPermission() async {
     if (await Permission.accessMediaLocation.isDenied) {
       await Permission.accessMediaLocation.request();
+    }
+  }
+
+  // ask storage permission
+  static Future<void> _askStoragePermission() async {
+    if (await Permission.storage.isDenied) {
+      await Permission.storage.request();
     }
   }
 
@@ -95,6 +106,9 @@ class HelperMethods {
         break;
       case 3:
         _askPhonePermission();
+        break;
+      case 4:
+        _askStoragePermission();
         break;
       default:
         _askAllPermissions();

@@ -4,7 +4,7 @@ import 'package:school_profile/index.dart';
 
 class MobileDetailItem extends StatelessWidget {
   final String title;
-  final String detail;
+  final String? detail;
   final Color? titleColor;
   final Color? detailColor;
   final Color? backgroundColor;
@@ -13,11 +13,12 @@ class MobileDetailItem extends StatelessWidget {
   final FontWeight? titleWeight;
   final FontWeight? detailWeight;
   final int? maxLines;
+  final Widget? detailWidget;
 
   const MobileDetailItem({
     Key? key,
     required this.title,
-    required this.detail,
+    this.detail,
     this.titleColor,
     this.detailColor,
     this.backgroundColor,
@@ -26,6 +27,7 @@ class MobileDetailItem extends StatelessWidget {
     this.titleWeight,
     this.detailWeight,
     this.maxLines,
+    this.detailWidget,
   }) : super(key: key);
 
   @override
@@ -56,18 +58,31 @@ class MobileDetailItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            CustomTextWidget(
-              text: "${title.toUpperCase()} : ",
-              fontSize: 18.0,
-              fontWeight: titleWeight ?? FontWeight.w900,
-              color: titleColor ?? BrandColors.colorText,
+            // clip rect to make sure the text doesn't overflow
+            Flexible(
+              child: ClipRRect(
+                child: CustomTextWidget(
+                  text: "${title.toUpperCase()} : ",
+                  fontSize: 18.0,
+                  fontWeight: titleWeight ?? FontWeight.w900,
+                  color: titleColor ?? BrandColors.colorText,
+                  textAlign: TextAlign.left,
+                  maxLines: 4,
+                ),
+              ),
             ),
-            CustomTextWidget(
-              text: detail,
-              fontSize: detailSize ?? 18.0,
-              fontWeight: detailWeight ?? FontWeight.w400,
-              color: detailColor ?? BrandColors.colorText,
-              maxLines: maxLines ?? 4,
+            Expanded(
+              child: ClipRRect(
+                child: detailWidget ??
+                    CustomTextWidget(
+                      text: detail ?? "",
+                      fontSize: detailSize ?? 18.0,
+                      fontWeight: detailWeight ?? FontWeight.w400,
+                      color: detailColor ?? BrandColors.colorText,
+                      maxLines: maxLines ?? 30,
+                      textAlign: TextAlign.left,
+                    ),
+              ),
             ),
           ],
         ),

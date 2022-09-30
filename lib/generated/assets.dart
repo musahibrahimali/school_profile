@@ -11,6 +11,9 @@ class Assets {
   static const String carouselCarouselImage5 = 'assets/carousel/carousel_image_5.jpg';
   static const String carouselCarouselImage6 = 'assets/carousel/carousel_image_6.png';
   static const String carouselCarouselImage7 = 'assets/carousel/carousel_image_7.jpg';
+  static const String groupMusah = 'assets/group/musah.jpg';
+  static const String groupNabbie = 'assets/group/nabbie.jpg';
+  static const String groupSly = 'assets/group/sly.jpg';
   static const String iconsChecklist = 'assets/icons/checklist.png';
   static const String iconsFeatherMessageSquare = 'assets/icons/feather_message_square.svg';
   static const String iconsFeatherShare2 = 'assets/icons/feather_share_2.svg';

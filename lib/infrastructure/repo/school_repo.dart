@@ -53,6 +53,7 @@ class SchoolRepo {
             'mapAddress': mapAddress,
             ...data,
           };
+          // debugPrint("school map from firestore: $schoolMap");
           return SchoolModel.fromJson(schoolMap);
         }
         return null;

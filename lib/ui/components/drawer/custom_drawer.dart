@@ -1,4 +1,3 @@
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -112,6 +111,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         title: 'Register School',
                         infoCount: 0,
                         onTap: () {
+                          schoolController.resetSchoolController();
                           Navigator.pushNamed(context, RegisterSchoolScreen.id);
                         },
                       ),
@@ -127,11 +127,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           title: 'Admin Schools',
                           infoCount: 0,
                           onTap: () {
-                            // change the theme to light
-                            ThemeSwitcher.of(context).changeTheme(
-                              theme: BrandThemes.lightTheme(context),
-                            );
-                            themeController.toggleTheme();
+                            Navigator.pop(context);
                             Navigator.pushNamed(context, AdminSchoolsScreen.id);
                           },
                         );

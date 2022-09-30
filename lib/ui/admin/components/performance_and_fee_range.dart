@@ -84,9 +84,9 @@ class _PerformanceAndFeeRangeState extends State<PerformanceAndFeeRange> {
                     SizedBox(height: 6.h),
                     Text.rich(
                       const TextSpan(
-                        children: [
+                        children: <InlineSpan>[
                           TextSpan(
-                            text: "Please provide the current School performance in WASSCE or BECE and the fee range",
+                            text: "Please provide the current School performance and the fee/fee policy",
                             style: TextStyle(
                               fontSize: 18.0,
                               color: Colors.white,
@@ -122,7 +122,7 @@ class _PerformanceAndFeeRangeState extends State<PerformanceAndFeeRange> {
                         onChanged: (val) {
                           setState(() {});
                         },
-                        label: "Fee range",
+                        label: "Fee/Fee Policy",
                         maxLines: 2,
                         controller: feeRangeController,
                         keyboardType: TextInputType.multiline,

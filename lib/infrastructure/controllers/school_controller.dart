@@ -12,6 +12,25 @@ class SchoolController extends GetxController {
   final _activeIndex = 1.obs;
 
   final _isUsingSearch = false.obs;
+  var schoolLevels = [];
+  final _weOperateOnSaturdays = false.obs;
+  final _agreeTermsAndCondition = false.obs;
+
+  // update we operate on saturdays
+  void updateWeOperateOnSaturdays(bool value) {
+    _weOperateOnSaturdays.value = value;
+  }
+
+  // update agree terms and condition
+  void updateAgreeTermsAndCondition(bool value) {
+    _agreeTermsAndCondition.value = value;
+  }
+
+  // update school levels
+  void updateSchoolLevels(List<dynamic> levels) {
+    schoolLevels.clear();
+    schoolLevels.addAll(levels);
+  }
 
   // boolean for filter conditions
   final _isName = true.obs;
@@ -120,6 +139,7 @@ class SchoolController extends GetxController {
   // update destination address
   void updateAddressPoint(Address mapAddress) {
     _addressPoint = mapAddress;
+    debugPrint("address point: ${_addressPoint.toJson()}");
     // set the school map address controller text to the address point name
     mapAddressController.text = _addressPoint.placeName!;
     searchAddressController.clear();
@@ -166,8 +186,9 @@ class SchoolController extends GetxController {
     schoolModelToDatabase.history = historyController.text;
     schoolModelToDatabase.facilities = facilitiesController.text;
     schoolModelToDatabase.performance = performanceController.text;
-    schoolModelToDatabase.level = levelController.text;
+    schoolModelToDatabase.level = schoolLevels;
     schoolModelToDatabase.mapAddress = _addressPoint;
+    schoolModelToDatabase.operatingHours = "${openingTimeController.text} - ${closingTimeController.text} ${_weOperateOnSaturdays.value ? "MON - SAT" : "MON - FRI"}";
   }
 
   // update review model to database
@@ -217,6 +238,36 @@ class SchoolController extends GetxController {
     avatarImage = null;
   }
 
+  // set school model details up for editing
+  void setSchoolModelDetailsUpForEditing(SchoolModel school) {
+    schoolModelToDatabase.id = school.id;
+    nameController.text = school.name!;
+    schoolEmailController.text = school.emailAddress!;
+    schoolPhoneNumberController.text = school.phoneNumber!;
+    addressController.text = school.address!;
+    extraCurricularController.text = school.extraCurricular!;
+    categoryController.text = school.category!;
+    headTeacherController.text = school.nameOfHeadTeacher!;
+    yearOfEstablishmentController.text = school.yearOfEstablishment!;
+    sloganController.text = school.slogan!;
+    regionController.text = school.region!;
+    townController.text = school.town!;
+    districtController.text = school.district!;
+    feeRangeController.text = school.feeRange!;
+    studentsPopulationController.text = school.studentsPopulation!;
+    teachersPopulationController.text = school.teachersPopulation!;
+    nonTeachingStaffPopulationController.text = school.nonTeachingStaffPopulation!;
+    ratingController.text = school.rating!;
+    awardsController.text = school.awards!;
+    historyController.text = school.history!;
+    facilitiesController.text = school.facilities!;
+    performanceController.text = school.performance!;
+    schoolLevels = school.level!;
+    _addressPoint = school.mapAddress!;
+    mapAddressController.text = school.mapAddress!.placeName!;
+    isSchoolLocationChosen = true;
+  }
+
   // reset school controller to default
   void resetSchoolController() {
     // clear all text editing controllers
@@ -242,6 +293,11 @@ class SchoolController extends GetxController {
     feeRangeController.clear();
     schoolEmailController.clear();
     schoolPhoneNumberController.clear();
+    schoolLevels.clear();
+    openingTimeController.clear();
+    closingTimeController.clear();
+    _weOperateOnSaturdays.value = false;
+    _agreeTermsAndCondition.value = false;
     // clear all images
     images = null;
     avatarImage = null;
@@ -279,7 +335,7 @@ class SchoolController extends GetxController {
         _filteredSchoolList.sort((a, b) => a.category!.compareTo(b.category!));
       }
       if (_isLevel.value) {
-        _filteredSchoolList.sort((a, b) => a.level!.compareTo(b.level!));
+        _filteredSchoolList.sort((a, b) => a.level![0].compareTo(b.level![0]));
       }
       if (_isFeeRange.value) {
         _filteredSchoolList.sort((a, b) => a.feeRange!.compareTo(b.feeRange!));
@@ -311,17 +367,15 @@ class SchoolController extends GetxController {
           school.slogan!.toLowerCase().contains(searchString.toLowerCase()) ||
           school.category!.toLowerCase().contains(searchString.toLowerCase()) ||
           school.address!.toLowerCase().contains(searchString.toLowerCase()) ||
-          school.level!.toLowerCase().contains(searchString.toLowerCase()) ||
+          school.level![0].toLowerCase().contains(searchString.toLowerCase()) ||
           school.feeRange!.toLowerCase().contains(searchString.toLowerCase()) ||
           school.feeRange!.toLowerCase().contains(searchString.toLowerCase()) ||
           school.mapAddress!.placeName!.toLowerCase().contains(searchString.toLowerCase()) ||
           school.town!.toLowerCase().contains(searchString.toLowerCase())) {
         // add the school to the filtered list
-        debugPrint("found an item $searchString");
+        // debugPrint("found an item $searchString");
         _filteredSchoolList.add(school);
-      } else {
-        debugPrint("no item found an item $searchString");
-      }
+      } else {}
       // filter the list and return the school
       return true;
     }).toList();
@@ -339,6 +393,8 @@ class SchoolController extends GetxController {
   bool get isPopular => _isPopular.value;
   bool get isUsingSearch => _isUsingSearch.value;
   int get activeIndex => _activeIndex.value;
+  bool get weOperateOnSaturdays => _weOperateOnSaturdays.value;
+  bool get agreeTermAndConditions => _agreeTermsAndCondition.value;
   List<SchoolModel> get schools => allSchools;
   List<ReviewModel> get reviews => allReviews;
   List<SchoolModel> get filteredSchoolList => _filteredSchoolList;

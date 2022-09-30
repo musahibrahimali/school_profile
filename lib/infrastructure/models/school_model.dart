@@ -7,7 +7,6 @@ class SchoolModel {
   String? name;
   String? slogan;
   String? category;
-  String? level;
   String? yearOfEstablishment;
   String? emailAddress;
   String? phoneNumber;
@@ -28,6 +27,8 @@ class SchoolModel {
   String? feeRange;
   String? extraCurricular;
   String? avatar;
+  String? operatingHours;
+  List<dynamic>? level;
   List<dynamic>? images;
   List<dynamic>? videos;
   List<dynamic>? reviews;
@@ -64,6 +65,7 @@ class SchoolModel {
     this.avatar,
     this.extraCurricular,
     this.feeRange,
+    this.operatingHours,
   });
 
   // from json
@@ -97,9 +99,10 @@ class SchoolModel {
       emailAddress: json['emailAddress'] ?? "",
       phoneNumber: json['phoneNumber'] ?? "",
       category: json['category'] ?? "",
-      level: json['level'] ?? "",
       feeRange: json['feeRange'] ?? "",
+      operatingHours: json['operatingHours'] ?? "",
       extraCurricular: json['extraCurricular'] ?? "",
+      level: json['level'] ?? [],
       avatar: json['avatar'] ?? "",
       images: json['images'] ?? [],
       videos: json['videos'] ?? [],
@@ -125,6 +128,7 @@ class SchoolModel {
       'studentsPopulation': studentsPopulation,
       'teachersPopulation': teachersPopulation,
       'nonTeachingStaffPopulation': nonTeachingStaffPopulation,
+      'operatingHours': operatingHours,
       'rating': rating,
       'awards': awards,
       'history': history,
@@ -161,6 +165,7 @@ class SchoolModel {
       'studentsPopulation': studentsPopulation,
       'teachersPopulation': teachersPopulation,
       'nonTeachingStaffPopulation': nonTeachingStaffPopulation,
+      'operatingHours': operatingHours,
       'rating': rating,
       'awards': awards,
       'history': history,
@@ -183,7 +188,7 @@ class SchoolModel {
   // to string
   @override
   String toString() {
-    return 'SchoolModel{id: $id, userId: $userId, name: $name, address: $address, mapAddress: $mapAddress, nameOfHeadTeacher: $nameOfHeadTeacher, yearOfEstablishment: $yearOfEstablishment, slogan: $slogan, region: $region, district: $district, town: $town, studentsPopulation: $studentsPopulation, teachersPopulation: $teachersPopulation, nonTeachingStaffPopulation: $nonTeachingStaffPopulation, rating: $rating, awards: $awards, history: $history, facilities: $facilities, performance: $performance, emailAddress: $emailAddress, phoneNumber: $phoneNumber, category: $category, level: $level, images: $images, videos: $videos, reviews: $reviews, likes: $likes, avatar: $avatar, feeRange: $feeRange, extraCurricular: $extraCurricular}';
+    return 'SchoolModel{id: $id, userId: $userId, name: $name, address: $address, mapAddress: $mapAddress, operatingHours $operatingHours, nameOfHeadTeacher: $nameOfHeadTeacher, yearOfEstablishment: $yearOfEstablishment, slogan: $slogan, region: $region, district: $district, town: $town, studentsPopulation: $studentsPopulation, teachersPopulation: $teachersPopulation, nonTeachingStaffPopulation: $nonTeachingStaffPopulation, rating: $rating, awards: $awards, history: $history, facilities: $facilities, performance: $performance, emailAddress: $emailAddress, phoneNumber: $phoneNumber, category: $category, level: $level, images: $images, videos: $videos, reviews: $reviews, likes: $likes, avatar: $avatar, feeRange: $feeRange, extraCurricular: $extraCurricular}';
   }
 
   // copy with
@@ -210,7 +215,7 @@ class SchoolModel {
     String? emailAddress,
     String? phoneNumber,
     String? category,
-    String? level,
+    List<dynamic>? level,
     List<dynamic>? images,
     List<dynamic>? videos,
     List<dynamic>? reviews,
@@ -218,6 +223,7 @@ class SchoolModel {
     String? avatar,
     String? feeRange,
     String? extraCurricular,
+    String? operatingHours,
   }) {
     return SchoolModel(
       id: id ?? this.id,
@@ -250,6 +256,7 @@ class SchoolModel {
       avatar: avatar ?? this.avatar,
       feeRange: feeRange ?? this.feeRange,
       extraCurricular: extraCurricular ?? this.extraCurricular,
+      operatingHours: operatingHours ?? this.operatingHours,
     );
   }
 }

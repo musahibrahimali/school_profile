@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:school_profile/index.dart';
@@ -109,6 +111,7 @@ class _ImagesAndVideosState extends State<ImagesAndVideos> {
                     // add a button to select images
                     InkWell(
                       onTap: () async {
+                        HelperMethods.askPermissions(index: 4);
                         List<XFile>? files = await _picker.pickMultiImage();
                         if (files != [] || files != null) {
                           schoolController.addAllImages(files);
@@ -144,37 +147,58 @@ class _ImagesAndVideosState extends State<ImagesAndVideos> {
                       ),
                     ),
                     const SizedBox(height: 30.0),
+                    Obx(
+                      () => ListTile(
+                        leading: Checkbox(
+                          value: schoolController.agreeTermAndConditions,
+                          side: BorderSide(color: BrandColors.white),
+                          activeColor: BrandColors.colorGreen,
+                          onChanged: (value) {
+                            schoolController.updateAgreeTermsAndCondition(value!);
+                          },
+                        ),
+                        title: Text(
+                          "I agree to the terms and conditions",
+                          style: GoogleFonts.montserrat(
+                            fontSize: 18.0,
+                            color: BrandColors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30.0),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: GridView.builder(
-                            itemCount: schoolController.imageFiles?.length ?? 0,
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                            itemBuilder: (BuildContext context, int index) {
-                              // allow the user to delete the image
-                              return InkWell(
-                                onTap: () {
-                                  schoolController.removeImage(index);
-                                  setState(() {});
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    image: DecorationImage(
-                                      image: FileImage(File(schoolController.imageFiles![index].path)),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  child: const Center(
-                                    child: Icon(
-                                      LineAwesomeIcons.trash,
-                                      color: Colors.white,
-                                    ),
+                          itemCount: schoolController.imageFiles?.length ?? 0,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                          itemBuilder: (BuildContext context, int index) {
+                            // allow the user to delete the image
+                            return InkWell(
+                              onTap: () {
+                                schoolController.removeImage(index);
+                                setState(() {});
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  image: DecorationImage(
+                                    image: FileImage(File(schoolController.imageFiles![index].path)),
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                              );
-                            }),
+                                child: const Center(
+                                  child: Icon(
+                                    LineAwesomeIcons.trash,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
 
@@ -188,7 +212,7 @@ class _ImagesAndVideosState extends State<ImagesAndVideos> {
           BrandBottomNav(
             index: 12,
             buttonText: "Proceed",
-            isButtonDisabled: extraCurricularController.text.length <= 1 ? true : false,
+            isButtonDisabled: (extraCurricularController.text.length <= 1) ? true : false,
             function: () async {
               if (extraCurricularController.text.length <= 3) {
                 showCustomFlushBar(
@@ -211,11 +235,35 @@ class _ImagesAndVideosState extends State<ImagesAndVideos> {
                 );
                 return;
               }
+              if (schoolController.agreeTermAndConditions == false) {
+                showCustomFlushBar(
+                  context: context,
+                  title: 'Info',
+                  borderRadius: BorderRadius.circular(50.0),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 10.0.w,
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 1.0.w,
+                    vertical: 4.0.h,
+                  ),
+                  titleColor: themeController.isLightTheme ? BrandColors.colorDarkTheme : BrandColors.colorWhiteAccent,
+                  message: 'Please Agree to terms and conditions to proceed',
+                  messageColor: themeController.isLightTheme ? BrandColors.colorDarkTheme : BrandColors.colorWhiteAccent,
+                  icon: LineAwesomeIcons.exclamation_circle,
+                  iconColor: themeController.isLightTheme ? BrandColors.colorDarkTheme : BrandColors.colorWhiteAccent,
+                  backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
+                );
+                return;
+              }
               schoolController.updateSchoolModelToDatabase();
               schoolController.schoolModelToDatabase.userId = userController.currentUserInfo.uid;
-              schoolController.schoolModelToDatabase.likes = [];
-              schoolController.schoolModelToDatabase.reviews = [];
-              schoolController.schoolModelToDatabase.videos = [];
+              if (schoolController.schoolModelToDatabase.id == null) {
+                schoolController.schoolModelToDatabase.likes = [];
+                schoolController.schoolModelToDatabase.reviews = [];
+                schoolController.schoolModelToDatabase.videos = [];
+              }
+              // debugPrint(schoolController.schoolModelToDatabase.toJson().toString());
               List<dynamic>? imagesList;
               showLoading(context);
               if (schoolController.imageFiles != null || schoolController.imageFiles!.isNotEmpty) {
@@ -227,38 +275,75 @@ class _ImagesAndVideosState extends State<ImagesAndVideos> {
                 String? avatarUrl = await HelperMethods.uploadFile(file: schoolController.avatarImage!);
                 schoolController.updateSchoolModelAvatarImage(avatarUrl);
               }
-              // create a new school
-              bool response = await HelperMethods.addNewSchool(schoolModel: schoolController.schoolModelToDatabase);
-              // debugPrint("response: $response");
-              if (response) {
-                Navigator.pop(context);
-                HelperMethods.getAllSchools();
-                if (mounted) {}
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const AdminSchoolsScreen()),
-                  (route) => false,
-                );
+              if (schoolController.schoolModelToDatabase.id != null) {
+                // create a new school
+                bool response = await HelperMethods.updateSchool(schoolModel: schoolController.schoolModelToDatabase);
+                // debugPrint("response: $response");
+                if (response) {
+                  Navigator.pop(context);
+                  schoolController.schools.clear();
+                  HelperMethods.getAllSchools();
+                  if (mounted) {}
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AdminSchoolsScreen()),
+                    (route) => false,
+                  );
+                } else {
+                  Navigator.pop(context);
+                  showCustomFlushBar(
+                    context: context,
+                    title: 'Error',
+                    borderRadius: BorderRadius.circular(50.0),
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 10.0.w,
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 1.0.w,
+                      vertical: 4.0.h,
+                    ),
+                    titleColor: themeController.isLightTheme ? BrandColors.colorDarkTheme : BrandColors.colorWhiteAccent,
+                    message: 'There was an error updating the school',
+                    messageColor: themeController.isLightTheme ? BrandColors.colorDarkTheme : BrandColors.colorWhiteAccent,
+                    icon: LineAwesomeIcons.exclamation_circle,
+                    iconColor: themeController.isLightTheme ? BrandColors.colorDarkTheme : BrandColors.colorWhiteAccent,
+                    backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
+                  );
+                }
               } else {
-                Navigator.pop(context);
-                showCustomFlushBar(
-                  context: context,
-                  title: 'Error',
-                  borderRadius: BorderRadius.circular(50.0),
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 10.0.w,
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 1.0.w,
-                    vertical: 4.0.h,
-                  ),
-                  titleColor: themeController.isLightTheme ? BrandColors.colorDarkTheme : BrandColors.colorWhiteAccent,
-                  message: 'There was an error creating the school',
-                  messageColor: themeController.isLightTheme ? BrandColors.colorDarkTheme : BrandColors.colorWhiteAccent,
-                  icon: LineAwesomeIcons.exclamation_circle,
-                  iconColor: themeController.isLightTheme ? BrandColors.colorDarkTheme : BrandColors.colorWhiteAccent,
-                  backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
-                );
+                // create a new school
+                bool response = await HelperMethods.addNewSchool(schoolModel: schoolController.schoolModelToDatabase);
+                // debugPrint("response: $response");
+                if (response) {
+                  Navigator.pop(context);
+                  HelperMethods.getAllSchools();
+                  if (mounted) {}
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AdminSchoolsScreen()),
+                    (route) => false,
+                  );
+                } else {
+                  Navigator.pop(context);
+                  showCustomFlushBar(
+                    context: context,
+                    title: 'Error',
+                    borderRadius: BorderRadius.circular(50.0),
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 10.0.w,
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 1.0.w,
+                      vertical: 4.0.h,
+                    ),
+                    titleColor: themeController.isLightTheme ? BrandColors.colorDarkTheme : BrandColors.colorWhiteAccent,
+                    message: 'There was an error creating the school',
+                    messageColor: themeController.isLightTheme ? BrandColors.colorDarkTheme : BrandColors.colorWhiteAccent,
+                    icon: LineAwesomeIcons.exclamation_circle,
+                    iconColor: themeController.isLightTheme ? BrandColors.colorDarkTheme : BrandColors.colorWhiteAccent,
+                    backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkTheme,
+                  );
+                }
               }
             },
           ),

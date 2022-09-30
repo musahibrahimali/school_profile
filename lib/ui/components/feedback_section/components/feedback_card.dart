@@ -37,7 +37,7 @@ class _MobileFeedbackCardState extends State<MobileFeedbackCard> {
             boxShadow: [kDefaultCardShadow],
           ),
           child: Column(
-            children: [
+            children: <Widget>[
               Transform.translate(
                 offset: const Offset(0, -55),
                 child: AnimatedContainer(
@@ -71,7 +71,7 @@ class _MobileFeedbackCardState extends State<MobileFeedbackCard> {
               const SizedBox(height: kDefaultPadding * 2),
               CustomTextWidget(
                 text: feedbacks[widget.index].name,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w900,
                 color: themeController.isLightTheme ? BrandColors.colorTextDark : BrandColors.colorLightGray,
               ),
             ],

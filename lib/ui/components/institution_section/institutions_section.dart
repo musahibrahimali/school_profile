@@ -11,8 +11,18 @@ class MobileInstitutionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // get the first three schools if they exist
-    List<SchoolModel> firstThreeSchools = schoolController.schools.length > 3 ? schoolController.schools.sublist(0, 3) : schoolController.schools;
+    List<SchoolModel> popularSchools = [];
+    // get the schools with the most likes
+    List<SchoolModel> mostLikedSchools = schoolController.schools;
+    // if mostLikedSchools is not empty
+    if (mostLikedSchools.isNotEmpty) {
+      // sort the schools by likes
+      mostLikedSchools.sort((a, b) => b.likes!.length.compareTo(a.likes!.length));
+      // get the first three schools if they exist
+      popularSchools = mostLikedSchools.length > 3 ? mostLikedSchools.sublist(0, 3) : mostLikedSchools;
+    } else {
+      popularSchools = mostLikedSchools.length > 3 ? mostLikedSchools.sublist(0, 3) : mostLikedSchools;
+    }
 
     return Obx(
       () => Container(
@@ -121,96 +131,123 @@ class MobileInstitutionSection extends StatelessWidget {
             const SizedBox(height: kDefaultPadding * 1.5),
             SizedBox(
               width: double.infinity,
-              child: Wrap(
-                spacing: kDefaultPadding,
-                runSpacing: kDefaultPadding * 1,
-                children: List.generate(
-                  firstThreeSchools.length,
-                  (index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: InstitutionCard(
-                      onLike: () async {
-                        if (userController.isUserLoggedIn == true) {
-                          if (firstThreeSchools[index].likes!.isEmpty) {
-                            FirebaseFirestore.instance.collection(FirestorePaths.schoolsCollection).doc(firstThreeSchools[index].id).update(
-                              {
-                                'likes': FieldValue.arrayUnion([
-                                  {'user_id': userController.currentUserInfo.uid, 'school_id': firstThreeSchools[index].id}
-                                ])
-                              },
-                            ).whenComplete(() {
-                              debugPrint('Field Added');
-                              schoolController.schools.clear();
-                              schoolController.clearFilteredSchools();
-                              HelperMethods.getAllSchools();
-                            });
-                          } else {
-                            for (dynamic like in firstThreeSchools[index].likes!) {
-                              if (like['user_id'] == userController.currentUserInfo.uid) {
-                                // debugPrint("were here $like");
-                                FirebaseFirestore.instance.collection(FirestorePaths.schoolsCollection).doc(firstThreeSchools[index].id).update(
-                                  {
-                                    'likes': FieldValue.arrayRemove([
-                                      {'school_id': firstThreeSchools[index].id, 'user_id': userController.currentUserInfo.uid}
-                                    ])
-                                  },
-                                ).whenComplete(() {
-                                  debugPrint('Field Deleted');
-                                  schoolController.schools.clear();
-                                  schoolController.clearFilteredSchools();
-                                  HelperMethods.getAllSchools();
-                                });
+              child: popularSchools.isNotEmpty
+                  ? Wrap(
+                      spacing: kDefaultPadding,
+                      runSpacing: kDefaultPadding * 1,
+                      children: List.generate(
+                        popularSchools.length,
+                        (index) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: InstitutionCard(
+                            onDelete: () async {
+                              showLoading(context);
+                              bool response = await HelperMethods.deleteSchoolById(schoolId: popularSchools[index].id!);
+                              // debugPrint("response $response");
+                              if (response) {
+                                schoolController.schools.clear();
+                                HelperMethods.getAllSchools();
+                                Navigator.pop(context);
+                                showCustomFlushBar(
+                                  context: context,
+                                  message: "There was an error deleting school",
+                                );
                               } else {
-                                FirebaseFirestore.instance.collection(FirestorePaths.schoolsCollection).doc(firstThreeSchools[index].id).update(
-                                  {
-                                    'likes': FieldValue.arrayUnion([
-                                      {'user_id': userController.currentUserInfo.uid, 'school_id': firstThreeSchools[index].id}
-                                    ])
-                                  },
-                                ).whenComplete(() {
-                                  debugPrint('Field Added');
-                                  schoolController.schools.clear();
-                                  schoolController.clearFilteredSchools();
-                                  HelperMethods.getAllSchools();
-                                });
+                                showCustomFlushBar(
+                                  context: context,
+                                  message: "There was an error deleting school",
+                                );
                               }
-                            }
-                          }
-                        } else {
-                          showCustomFlushBar(
-                            context: context,
-                            title: 'Info',
-                            borderRadius: BorderRadius.circular(50.0),
-                            margin: EdgeInsets.symmetric(
-                              horizontal: 10.0.w,
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 1.0.w,
-                              vertical: 1.0.h,
-                            ),
-                            titleColor: themeController.isLightTheme ? BrandColors.colorPink : BrandColors.colorWhiteAccent,
-                            message: 'Please log in to like a school',
-                            messageColor: themeController.isLightTheme ? BrandColors.colorPink : BrandColors.colorWhiteAccent,
-                            icon: LineAwesomeIcons.exclamation_circle,
-                            iconColor: themeController.isLightTheme ? BrandColors.kErrorColor : BrandColors.colorWhiteAccent,
-                            backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkBlue,
-                          );
-                        }
-                      },
-                      schoolModel: firstThreeSchools[index],
-                      onPressed: () {
-                        SchoolModel schoolModel = firstThreeSchools[index];
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => SchoolProfilePage(schoolModel: schoolModel),
+                            },
+                            onEdit: () async {
+                              // get the school details from the index
+                              SchoolModel schoolModel = popularSchools[index];
+                              schoolController.setSchoolModelDetailsUpForEditing(schoolModel);
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterSchoolScreen()));
+                            },
+                            onLike: () async {
+                              if (userController.isUserLoggedIn == true) {
+                                if (popularSchools[index].likes!.isEmpty) {
+                                  FirebaseFirestore.instance.collection(FirestorePaths.schoolsCollection).doc(popularSchools[index].id).update(
+                                    {
+                                      'likes': FieldValue.arrayUnion([
+                                        {'user_id': userController.currentUserInfo.uid, 'school_id': popularSchools[index].id}
+                                      ])
+                                    },
+                                  ).whenComplete(() {
+                                    debugPrint('Field Added');
+                                    schoolController.schools.clear();
+                                    schoolController.clearFilteredSchools();
+                                    HelperMethods.getAllSchools();
+                                  });
+                                } else {
+                                  for (dynamic like in popularSchools[index].likes!) {
+                                    if (like['user_id'] == userController.currentUserInfo.uid) {
+                                      // debugPrint("were here $like");
+                                      FirebaseFirestore.instance.collection(FirestorePaths.schoolsCollection).doc(popularSchools[index].id).update(
+                                        {
+                                          'likes': FieldValue.arrayRemove([
+                                            {'school_id': popularSchools[index].id, 'user_id': userController.currentUserInfo.uid}
+                                          ])
+                                        },
+                                      ).whenComplete(() {
+                                        debugPrint('Field Deleted');
+                                        schoolController.schools.clear();
+                                        schoolController.clearFilteredSchools();
+                                        HelperMethods.getAllSchools();
+                                      });
+                                    } else {
+                                      FirebaseFirestore.instance.collection(FirestorePaths.schoolsCollection).doc(popularSchools[index].id).update(
+                                        {
+                                          'likes': FieldValue.arrayUnion([
+                                            {'user_id': userController.currentUserInfo.uid, 'school_id': popularSchools[index].id}
+                                          ])
+                                        },
+                                      ).whenComplete(() {
+                                        debugPrint('Field Added');
+                                        schoolController.schools.clear();
+                                        schoolController.clearFilteredSchools();
+                                        HelperMethods.getAllSchools();
+                                      });
+                                    }
+                                  }
+                                }
+                              } else {
+                                showCustomFlushBar(
+                                  context: context,
+                                  title: 'Info',
+                                  borderRadius: BorderRadius.circular(50.0),
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: 10.0.w,
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 1.0.w,
+                                    vertical: 1.0.h,
+                                  ),
+                                  titleColor: themeController.isLightTheme ? BrandColors.colorPink : BrandColors.colorWhiteAccent,
+                                  message: 'Please log in to like a school',
+                                  messageColor: themeController.isLightTheme ? BrandColors.colorPink : BrandColors.colorWhiteAccent,
+                                  icon: LineAwesomeIcons.exclamation_circle,
+                                  iconColor: themeController.isLightTheme ? BrandColors.kErrorColor : BrandColors.colorWhiteAccent,
+                                  backgroundColor: themeController.isLightTheme ? BrandColors.colorBackground : BrandColors.colorDarkBlue,
+                                );
+                              }
+                            },
+                            schoolModel: popularSchools[index],
+                            onPressed: () {
+                              SchoolModel schoolModel = popularSchools[index];
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) => SchoolProfilePage(schoolModel: schoolModel),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
+                        ),
+                      ),
+                    )
+                  : const NoSchoolsBox(),
             ),
             const SizedBox(height: kDefaultPadding * 2),
           ],
